@@ -4,17 +4,19 @@
 
 ### services
 
-- [heroku](https://team02-w22-6pm-4.herokuapp.com)
+- [heroku](https://w22-6pm-4-team02.herokuapp.com)
+- [heroku qa](https://w22-6pm-4-team02-qa.herokuapp.com)
 - [docs](https://ucsb-cs156-w22.github.io/team02-w22-6pm-4-docs)
-- [qa](https://ucsb-cs156-w22.github.io/team02-w22-6pm-4-docs-qa)
+- [docs qa](https://ucsb-cs156-w22.github.io/team02-w22-6pm-4-docs-qa)
 - [coverage](https://app.codecov.io/gh/ucsb-cs156-w22/team02-w22-6pm-4)
 
 ### repositories
 
 - [github](https://github.com/ucsb-cs156-w22/team02-w22-6pm-4)
 - [docs](https://github.com/ucsb-cs156-w22/team02-w22-6pm-4-docs)
-- [qa](https://github.com/ucsb-cs156-w22/team02-w22-6pm-4-docs-qa)
-- [dashboard](https://dashboard.heroku.com/apps/team02-w22-6pm-4)
+- [docs qa](https://github.com/ucsb-cs156-w22/team02-w22-6pm-4-docs-qa)
+- [dashboard](https://dashboard.heroku.com/apps/w22-6pm-4-team02)
+- [dashboard qa](https://dashboard.heroku.com/apps/w22-6pm-4-team02-qa)
 
 The GitHub actions script to deploy the Storybook to QA requires some configuration; see [docs/github-actions.md](docs/github-actions.md) for details.
 
