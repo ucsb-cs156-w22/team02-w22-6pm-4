@@ -91,4 +91,29 @@ public class CollegiateSubredditControllerTests extends ControllerTestCase {
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
     }    
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_collegiateSubreddits_all__user_logged_in__returns_only_collegiateSubreddits_for_user() throws Exception {
+
+        // arrange
+
+        CollegiateSubreddit collegiatesubreddit1 = CollegiateSubreddit.builder().name("collegiatesubreddit 1").location("collegiatesubreddit 1").subreddit("collegiatesubreddit 1").id(1L).build();
+        CollegiateSubreddit collegiatesubreddit2 = CollegiateSubreddit.builder().name("collegiatesubreddit 2").location("collegiatesubreddit 2").subreddit("collegiatesubreddit 2").id(2L).build();
+
+        ArrayList<CollegiateSubreddit> expectedCollegiateSubreddit = new ArrayList<>();
+        expectedCollegiateSubreddit.addAll(Arrays.asList(collegiatesubreddit1, collegiatesubreddit2));
+        when(collegiateSubredditRepository.findAll()).thenReturn(expectedCollegiateSubreddit);
+
+        // act
+        MvcResult response = mockMvc.perform(get("/api/collegiateSubreddits/all"))
+                .andExpect(status().isOk()).andReturn();
+
+        // assert
+
+        verify(collegiateSubredditRepository, times(1)).findAll();
+        String expectedJson = mapper.writeValueAsString(expectedCollegiateSubreddit);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
+    }
 }
