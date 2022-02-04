@@ -1,9 +1,9 @@
-package edu.ucsb.cs156.example.controllers;
+package edu.ucsb.cs156.team02.controllers;
 
-import edu.ucsb.cs156.example.entities.UCSBSubject;
-import edu.ucsb.cs156.example.entities.User;
-import edu.ucsb.cs156.example.models.CurrentUser;
-import edu.ucsb.cs156.example.repositories.UCSBSubjectRepository;
+import edu.ucsb.cs156.team02.entities.UCSBSubject;
+import edu.ucsb.cs156.team02.entities.User;
+import edu.ucsb.cs156.team02.models.CurrentUser;
+import edu.ucsb.cs156.team02.repositories.UCSBSubjectRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -39,15 +39,15 @@ public class UCSBSubjectController extends ApiController {
      * along with the error messages pertaining to those situations. It
      * bundles together the state needed for those checks.
      */
-    public class UCSBSubjectOrError {
-        Long id;
-        UCSBSubject uCSBSubject;
-        ResponseEntity<String> error;
+    // public class UCSBSubjectOrError {
+    //     Long id;
+    //     UCSBSubject uCSBSubject;
+    //     ResponseEntity<String> error;
 
-        public UCSBSubjectOrError(Long id) {
-            this.id = id;
-        }
-    }
+    //     public UCSBSubjectOrError(Long id) {
+    //         this.id = id;
+    //     }
+    // }
 
     @Autowired
     UCSBSubjectRepository uCSBSubjectRepository;
@@ -65,53 +65,53 @@ public class UCSBSubjectController extends ApiController {
         return uCSBSubject;
     }
 
-    @ApiOperation(value = "List this user's UCSBSubject")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("/all")
-    public Iterable<UCSBSubject> thisUsersUCSBSubject() {
-        loggingService.logMethod();
-        CurrentUser currentUser = getCurrentUser();
-        Iterable<UCSBSubject> uCSBSubject = uCSBSubjectRepository.findAllByUserId(currentUser.getUser().getId());
-        return uCSBSubject;
-    }
+    // @ApiOperation(value = "List this user's UCSBSubject")
+    // @PreAuthorize("hasRole('ROLE_USER')")
+    // @GetMapping("/all")
+    // public Iterable<UCSBSubject> thisUsersUCSBSubject() {
+    //     loggingService.logMethod();
+    //     CurrentUser currentUser = getCurrentUser();
+    //     Iterable<UCSBSubject> uCSBSubject = uCSBSubjectRepository.findBySubject(currentUser.getUser().getId());
+    //     return uCSBSubject;
+    // }
 
-    @ApiOperation(value = "Get a single UCSBSubject (if it belongs to current user)")
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("")
-    public ResponseEntity<String> getUCSBSubjectById(
-            @ApiParam("id") @RequestParam Long id) throws JsonProcessingException {
-        loggingService.logMethod();
-        UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
+    // @ApiOperation(value = "Get a single UCSBSubject (if it belongs to current user)")
+    // @PreAuthorize("hasRole('ROLE_USER')")
+    // @GetMapping("")
+    // public ResponseEntity<String> getUCSBSubjectById(
+    //         @ApiParam("id") @RequestParam Long id) throws JsonProcessingException {
+    //     loggingService.logMethod();
+    //     // UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
 
-        toe = doesUCSBSubjectExist(toe);
-        if (toe.error != null) {
-            return toe.error;
-        }
-        toe = doesUCSBSubjectBelongToCurrentUser(toe);
-        if (toe.error != null) {
-            return toe.error;
-        }
-        String body = mapper.writeValueAsString(toe.UCSBSubject);
-        return ResponseEntity.ok().body(body);
-    }
+    //     // toe = doesUCSBSubjectExist(toe);
+    //     // if (toe.error != null) {
+    //     //     return toe.error;
+    //     // }
+    //     // toe = doesUCSBSubjectBelongToCurrentUser(toe);
+    //     // if (toe.error != null) {
+    //     //     return toe.error;
+    //     // }
+    //     String body = mapper.writeValueAsString(toe.UCSBSubject);
+    //     return ResponseEntity.ok().body(body);
+    // }
 
-    @ApiOperation(value = "Get a single UCSBSubject (no matter who it belongs to, admin only)")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("/admin")
-    public ResponseEntity<String> getTodoById_admin(
-            @ApiParam("id") @RequestParam Long id) throws JsonProcessingException {
-        loggingService.logMethod();
+    // @ApiOperation(value = "Get a single UCSBSubject (no matter who it belongs to, admin only)")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // @GetMapping("/admin")
+    // public ResponseEntity<String> getUCSBSubjectById_admin(
+    //         @ApiParam("id") @RequestParam Long id) throws JsonProcessingException {
+    //     loggingService.logMethod();
 
-        UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
+    //     UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
 
-        toe = doesUCSBSubjectExist(toe);
-        if (toe.error != null) {
-            return toe.error;
-        }
+    //     toe = doesUCSBSubjectExist(toe);
+    //     if (toe.error != null) {
+    //         return toe.error;
+    //     }
 
-        String body = mapper.writeValueAsString(toe.UCSBSubject);
-        return ResponseEntity.ok().body(body);
-    }
+    //     String body = mapper.writeValueAsString(toe.UCSBSubject);
+    //     return ResponseEntity.ok().body(body);
+    // }
 
     @ApiOperation(value = "Create a new UCSBSubject")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -119,22 +119,20 @@ public class UCSBSubjectController extends ApiController {
     public UCSBSubject postUCSBSubject(
         @ApiParam("subjectCode") @RequestParam String subjectCode,
         @ApiParam("subjectTranslation") @RequestParam String subjectTranslation,
-        @ApiParam("deptCode") @RequestParam Boolean deptCode,
-        @ApiParam("collegeCode") @RequestParam Boolean collegeCode,
-        @ApiParam("relatedDeptCode") @RequestParam Boolean relatedDeptCode,
-        @ApiParam("inactive") @RequestParam Boolean inactive) {
+        @ApiParam("deptCode") @RequestParam String deptCode,
+        @ApiParam("collegeCode") @RequestParam String collegeCode,
+        @ApiParam("relatedDeptCode") @RequestParam String relatedDeptCode,
+        @ApiParam("inactive") @RequestParam boolean inactive) {
         loggingService.logMethod();
-        CurrentUser currentUser = getCurrentUser();
-        log.info("currentUser={}", currentUser);
-
+   
         UCSBSubject uCSBSubject = new UCSBSubject();
-        UCSBSubject.setUser(currentUser.getUser());
-        UCSBSubject.setSubjectCode(subjectCode);
-        UCSBSubject.setSubjectTranslation(subjectTranslation);
-        UCSBSubject.setDeptCode(deptCode);
-        UCSBSubject.setCollegeCode(collegeCode);
-        UCSBSubject.setRelatedDeptCode(relatedDeptCode);
-        UCSBSubject.setinactivwe(inactive);
+        //UCSBSubject.setUser(currentUser.getUser());
+        uCSBSubject.setSubjectCode(subjectCode);
+        uCSBSubject.setSubjectTranslation(subjectTranslation);
+        uCSBSubject.setDeptCode(deptCode);
+        uCSBSubject.setCollegeCode(collegeCode);
+        uCSBSubject.setRelatedDeptCode(relatedDeptCode);
+        uCSBSubject.setInactive(inactive);
         UCSBSubject savedUCSBSubject = uCSBSubjectRepository.save(uCSBSubject);
         return savedUCSBSubject;
     }
@@ -246,19 +244,19 @@ public class UCSBSubjectController extends ApiController {
      * value to
      * report this error condition.
      */
-    public UCSBSubjectOrError doesUCSBSubjectExist(UCSBSubjectOrError toe) {
+    // public UCSBSubjectOrError doesUCSBSubjectExist(UCSBSubjectOrError toe) {
 
-        Optional<UCSBSubject> optionalUCSBSubject = uCSBSubjectRepository.findById(toe.id);
+    //     Optional<UCSBSubject> optionalUCSBSubject = uCSBSubjectRepository.findById(toe.id);
 
-        if (optionalUCSBSubject.isEmpty()) {
-            toe.error = ResponseEntity
-                    .badRequest()
-                    .body(String.format("UCSBSubject with id %d not found", toe.id));
-        } else {
-            toe.UCSBSubject = optionalUCSBSubject.get();
-        }
-        return toe;
-    }
+    //     if (optionalUCSBSubject.isEmpty()) {
+    //         toe.error = ResponseEntity
+    //                 .badRequest()
+    //                 .body(String.format("UCSBSubject with id %d not found", toe.id));
+    //     } else {
+    //         toe.UCSBSubject = optionalUCSBSubject.get();
+    //     }
+    //     return toe;
+    // }
 
     /**
      * Pre-conditions: toe.todo is non-null and refers to the todo with id toe.id,
@@ -268,20 +266,20 @@ public class UCSBSubjectController extends ApiController {
      * Otherwise error is a suitable
      * return value.
      */
-    public UCSBSubjectOrError doesUCSBSubjectBelongToCurrentUser(UCSBSubjectOrError toe) {
-        CurrentUser currentUser = getCurrentUser();
-        log.info("currentUser={}", currentUser);
+    // public UCSBSubjectOrError doesUCSBSubjectBelongToCurrentUser(UCSBSubjectOrError toe) {
+    //     CurrentUser currentUser = getCurrentUser();
+    //     log.info("currentUser={}", currentUser);
 
-        Long currentUserId = currentUser.getUser().getId();
-        Long UCSBSubjectUserId = toe.UCSBSubject.getUser().getId();
-        log.info("currentUserId={} UCSBSubjectUserId={}", currentUserId, UCSBSubjectUserId);
+    //     Long currentUserId = currentUser.getUser().getId();
+    //     Long UCSBSubjectUserId = toe.UCSBSubject.getUser().getId();
+    //     log.info("currentUserId={} UCSBSubjectUserId={}", currentUserId, UCSBSubjectUserId);
 
-        if (UCSBSubjectUserId != currentUserId) {
-            toe.error = ResponseEntity
-                    .badRequest()
-                    .body(String.format("UCSBSubject with id %d not found", toe.id));
-        }
-        return toe;
-    }
+    //     if (UCSBSubjectUserId != currentUserId) {
+    //         toe.error = ResponseEntity
+    //                 .badRequest()
+    //                 .body(String.format("UCSBSubject with id %d not found", toe.id));
+    //     }
+    //     return toe;
+    // }
 
 }
