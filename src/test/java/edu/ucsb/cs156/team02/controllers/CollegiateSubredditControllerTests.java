@@ -65,4 +65,30 @@ public class CollegiateSubredditControllerTests extends ControllerTestCase {
 
     // Tests with mocks for database actions
 
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_collegiateSubreddits_post__user_logged_in() throws Exception {
+        // arrange
+
+        CollegiateSubreddit expectedCollegiateSubreddit = CollegiateSubreddit.builder()
+                .name("Test Name")
+                .location("Test Location")
+                .subreddit("Test Subreddit")
+                .id(0L)
+                .build();
+
+        when(collegiateSubredditRepository.save(eq(expectedCollegiateSubreddit))).thenReturn(expectedCollegiateSubreddit);
+
+        // act
+        MvcResult response = mockMvc.perform(
+                post("/api/collegiateSubreddits/post?name=Test Name&location=Test Location&subreddit=Test Subreddit")
+                        .with(csrf()))
+                .andExpect(status().isOk()).andReturn();
+
+        // assert
+        verify(collegiateSubredditRepository, times(1)).save(expectedCollegiateSubreddit);
+        String expectedJson = mapper.writeValueAsString(expectedCollegiateSubreddit);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
+    }    
 }
