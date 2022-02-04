@@ -54,10 +54,10 @@ public class CollegiateSubredditController extends ApiController {
     public CollegiateSubreddit postCollegiateSubreddit(
             @ApiParam("name") @RequestParam String name,
             @ApiParam("location") @RequestParam String location,
-            @ApiParam("subreddit") @RequestParam Boolean subreddit) {
+            @ApiParam("subreddit") @RequestParam String subreddit) {
         loggingService.logMethod();
 
-        CollegiateSubreddit collegiateSubreddit = new Todo();
+        CollegiateSubreddit collegiateSubreddit = new CollegiateSubreddit();
         collegiateSubreddit.setName(name);
         collegiateSubreddit.setLocation(location);
         collegiateSubreddit.setSubreddit(subreddit);
