@@ -58,8 +58,8 @@ public class UCSBSubjectController extends ApiController {
     @ApiOperation(value = "List all UCSBSubjects")
     //@PreAuthorize("hasRole('ROLE_ADMIN')")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("/admin/all")
-    public Iterable<UCSBSubject> allUsersUCSBSubject() {
+    @GetMapping("/all")
+    public Iterable<UCSBSubject> allUCSBSubject() {
         loggingService.logMethod();
         Iterable<UCSBSubject> uCSBSubject = uCSBSubjectRepository.findAll();
         return uCSBSubject;
