@@ -35,9 +35,9 @@ public class UCSBRequirementController extends ApiController
     ObjectMapper mapper;
 
     @ApiOperation(value = "List all degree requirements.")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
-    public Iterable<UCSBRequirement> allRequirements() {
+    public Iterable<UCSBRequirement> getAllRequirements() {
         loggingService.logMethod();
         Iterable<UCSBRequirement> requirements = repository.findAll();
         return requirements;
@@ -66,5 +66,25 @@ public class UCSBRequirementController extends ApiController
         requirement.setInactive(inactive);
         UCSBRequirement saved = repository.save(requirement);
         return saved;
+    }
+
+    @ApiOperation(value = "Get a degree requirement.")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public ResponseEntity<String> getRequirement(
+        @ApiParam("The requirement's unique identifier.") @RequestParam Long id)
+        throws JsonProcessingException
+    {
+        loggingService.logMethod();
+
+        Optional<UCSBRequirement> requirement = repository.findById(id);
+
+        if (requirement.isEmpty()) {
+            return ResponseEntity.badRequest()
+                .body(String.format("id %d not found", id));
+        }
+
+        String body = mapper.writeValueAsString(requirement);
+        return ResponseEntity.ok().body(body);
     }
 }

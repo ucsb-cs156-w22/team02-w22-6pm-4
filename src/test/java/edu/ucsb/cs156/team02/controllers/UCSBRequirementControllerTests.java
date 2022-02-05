@@ -7,6 +7,7 @@ import edu.ucsb.cs156.team02.repositories.UserRepository;
 import edu.ucsb.cs156.team02.testconfig.TestConfig;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,21 +36,16 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
     /* /api/UCSBRequirements/all */
 
     @Test
-    public void api_requirements_stranger_does_get_all() throws Exception {
+    public void api_requirements_stranger_does_get_all() throws Exception
+    {
         mockMvc.perform(get("/api/UCSBRequirements/all"))
             .andExpect(status().is(403));
     }
 
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_requirements_user_does_get_all() throws Exception {
-        mockMvc.perform(get("/api/UCSBRequirements/all"))
-            .andExpect(status().is(403));
-    }
-
-    @WithMockUser(roles = { "ADMIN" })
-    @Test
-    public void api_requirements_admin_does_get_all() throws Exception {
+    public void api_requirements_admin_does_get_all() throws Exception
+    {
         UCSBRequirement dummy = UCSBRequirement.dummy(0);
         UCSBRequirement another = UCSBRequirement.dummy(1);
 
@@ -81,14 +77,16 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
         + "&inactive=true";
 
     @Test
-    public void api_requirements_stranger_does_post_requirement() throws Exception {
+    public void api_requirements_stranger_does_post_requirement() throws Exception
+    {
         mockMvc.perform(post(somePost))
             .andExpect(status().is(403));
     }
 
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_requirements_user_does_post_requirement() throws Exception {
+    public void api_requirements_user_does_post_requirement() throws Exception
+    {
         UCSBRequirement requirement = UCSBRequirement.dummy(0);
 
         when(repository.save(eq(requirement))).thenReturn(requirement);
@@ -103,6 +101,51 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
         verify(repository, times(1)).save(requirement);
 
         String expectedJson = mapper.writeValueAsString(requirement);
+        String responseString = response.getResponse().getContentAsString();
+
+        assertEquals(expectedJson, responseString);
+    }
+
+    /* /api/UCSBRequirements?id= */
+
+    @Test
+    public void api_requirements_stranger_does_get() throws Exception
+    {
+        mockMvc.perform(get("/api/UCSBRequirements?id=0"))
+            .andExpect(status().is(403));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_requirements_user_does_successful_get() throws Exception
+    {
+        UCSBRequirement requirement = UCSBRequirement.dummy(42L);
+
+        when(repository.findById(eq(42L))).thenReturn(Optional.of(requirement));
+
+        MvcResult response = mockMvc.perform(get("/api/UCSBRequirements?id=42"))
+            .andExpect(status().isOk()).andReturn();
+
+        verify(repository, times(1)).findById(eq(42L));
+
+        String expectedJson = mapper.writeValueAsString(requirement);
+        String responseString = response.getResponse().getContentAsString();
+
+        assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_requirements_user_does_unsuccessful_get() throws Exception
+    {
+        when(repository.findById(eq(42L))).thenReturn(Optional.empty());
+
+        MvcResult response = mockMvc.perform(get("/api/UCSBRequirements?id=42"))
+            .andExpect(status().isBadRequest()).andReturn();
+
+        verify(repository, times(1)).findById(eq(42L));
+
+        String expectedJson = "id 42 not found";
         String responseString = response.getResponse().getContentAsString();
 
         assertEquals(expectedJson, responseString);
