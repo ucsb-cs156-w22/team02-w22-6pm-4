@@ -41,7 +41,7 @@ public class UCSBSubjectController extends ApiController {
      */
     // public class UCSBSubjectOrError {
     //     Long id;
-    //     UCSBSubject uCSBSubject;
+    //     UCSBSubject UCSBSubject;
     //     ResponseEntity<String> error;
 
     //     public UCSBSubjectOrError(Long id) {
@@ -50,7 +50,7 @@ public class UCSBSubjectController extends ApiController {
     // }
 
     @Autowired
-    UCSBSubjectRepository uCSBSubjectRepository;
+    UCSBSubjectRepository UCSBSubjectRepository;
 
     @Autowired
     ObjectMapper mapper;
@@ -61,8 +61,8 @@ public class UCSBSubjectController extends ApiController {
     @GetMapping("/all")
     public Iterable<UCSBSubject> allUCSBSubject() {
         loggingService.logMethod();
-        Iterable<UCSBSubject> uCSBSubject = uCSBSubjectRepository.findAll();
-        return uCSBSubject;
+        Iterable<UCSBSubject> UCSBSubject = UCSBSubjectRepository.findAll();
+        return UCSBSubject;
     }
 
     // @ApiOperation(value = "List this user's UCSBSubject")
@@ -71,8 +71,8 @@ public class UCSBSubjectController extends ApiController {
     // public Iterable<UCSBSubject> thisUsersUCSBSubject() {
     //     loggingService.logMethod();
     //     CurrentUser currentUser = getCurrentUser();
-    //     Iterable<UCSBSubject> uCSBSubject = uCSBSubjectRepository.findBySubject(currentUser.getUser().getId());
-    //     return uCSBSubject;
+    //     Iterable<UCSBSubject> UCSBSubject = UCSBSubjectRepository.findBySubject(currentUser.getUser().getId());
+    //     return UCSBSubject;
     // }
 
     // @ApiOperation(value = "Get a single UCSBSubject (if it belongs to current user)")
@@ -125,15 +125,15 @@ public class UCSBSubjectController extends ApiController {
         @ApiParam("inactive") @RequestParam boolean inactive) {
         loggingService.logMethod();
    
-        UCSBSubject uCSBSubject = new UCSBSubject();
+        UCSBSubject UCSBSubject = new UCSBSubject();
         //UCSBSubject.setUser(currentUser.getUser());
-        uCSBSubject.setSubjectCode(subjectCode);
-        uCSBSubject.setSubjectTranslation(subjectTranslation);
-        uCSBSubject.setDeptCode(deptCode);
-        uCSBSubject.setCollegeCode(collegeCode);
-        uCSBSubject.setRelatedDeptCode(relatedDeptCode);
-        uCSBSubject.setInactive(inactive);
-        UCSBSubject savedUCSBSubject = uCSBSubjectRepository.save(uCSBSubject);
+        UCSBSubject.setSubjectCode(subjectCode);
+        UCSBSubject.setSubjectTranslation(subjectTranslation);
+        UCSBSubject.setDeptCode(deptCode);
+        UCSBSubject.setCollegeCode(collegeCode);
+        UCSBSubject.setRelatedDeptCode(relatedDeptCode);
+        UCSBSubject.setInactive(inactive);
+        UCSBSubject savedUCSBSubject = UCSBSubjectRepository.save(UCSBSubject);
         return savedUCSBSubject;
     }
 
@@ -246,7 +246,7 @@ public class UCSBSubjectController extends ApiController {
      */
     // public UCSBSubjectOrError doesUCSBSubjectExist(UCSBSubjectOrError toe) {
 
-    //     Optional<UCSBSubject> optionalUCSBSubject = uCSBSubjectRepository.findById(toe.id);
+    //     Optional<UCSBSubject> optionalUCSBSubject = UCSBSubjectRepository.findById(toe.id);
 
     //     if (optionalUCSBSubject.isEmpty()) {
     //         toe.error = ResponseEntity

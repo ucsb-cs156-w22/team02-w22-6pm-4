@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 public class UCSBSubjectControllerTests extends ControllerTestCase {
 
     @MockBean
-    UCSBSubjectRepository uCSBSubjectRepository;
+    UCSBSubjectRepository UCSBSubjectRepository;
 
     @MockBean
     UserRepository userRepository;
@@ -42,7 +42,7 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
     // Authorization tests for /api/ucsbSubject/all
 
     @Test
-    public void api_uCSBSubject_all__logged_out__returns_403() throws Exception {
+    public void api_UCSBSubject_all__logged_out__returns_403() throws Exception {
         mockMvc.perform(get("/api/UCSBSubjects/all"))
                 .andExpect(status().is(403));
     }
@@ -78,7 +78,7 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
 
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_uCSBSubject_all__user_logged_in__returns_200() throws Exception {
+    public void api_UCSBSubject_all__user_logged_in__returns_200() throws Exception {
         mockMvc.perform(get("/api/UCSBSubjects/all"))
                 .andExpect(status().isOk());
     }
@@ -86,7 +86,7 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
     // Authorization tests for /api/todos/post
 
     @Test
-    public void api_uCSBSubject_post__logged_out__returns_403() throws Exception {
+    public void api_UCSBSubject_post__logged_out__returns_403() throws Exception {
         mockMvc.perform(post("/api/UCSBSubjects/post"))
                 .andExpect(status().is(403));
     }
@@ -237,18 +237,18 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
 
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_uCSBSubject_all__user_logged_in__returns_only_uCSBSubject_for_user() throws Exception {
+    public void api_UCSBSubject_all__user_logged_in__returns_only_UCSBSubject_for_user() throws Exception {
 
         // arrange
 
         User thisUser = currentUserService.getCurrentUser().getUser();
 
-        UCSBSubject uCSBSubject1 = UCSBSubject.builder().subjectCode("UCSBSubject 1").subjectTranslation("UCSBSubject 1").deptCode("UCSBSubject 1").collegeCode("UCSBSubject 1").relatedDeptCode("UCSBSubject 1").inactive(false).id(1L).build();
-        UCSBSubject uCSBSubject2 = UCSBSubject.builder().subjectCode("UCSBSubject 2").subjectTranslation("UCSBSubject 2").deptCode("UCSBSubject 2").collegeCode("UCSBSubject 2").relatedDeptCode("UCSBSubject 2").inactive(false).id(2L).build();
+        UCSBSubject UCSBSubject1 = UCSBSubject.builder().subjectCode("UCSBSubject 1").subjectTranslation("UCSBSubject 1").deptCode("UCSBSubject 1").collegeCode("UCSBSubject 1").relatedDeptCode("UCSBSubject 1").inactive(false).id(1L).build();
+        UCSBSubject UCSBSubject2 = UCSBSubject.builder().subjectCode("UCSBSubject 2").subjectTranslation("UCSBSubject 2").deptCode("UCSBSubject 2").collegeCode("UCSBSubject 2").relatedDeptCode("UCSBSubject 2").inactive(false).id(2L).build();
 
         ArrayList<UCSBSubject> expectedUCSBSubject = new ArrayList<>();
-        expectedUCSBSubject.addAll(Arrays.asList(uCSBSubject1, uCSBSubject2));
-        when(uCSBSubjectRepository.findAll()).thenReturn(expectedUCSBSubject);
+        expectedUCSBSubject.addAll(Arrays.asList(UCSBSubject1, UCSBSubject2));
+        when(UCSBSubjectRepository.findAll()).thenReturn(expectedUCSBSubject);
 
         // act
         MvcResult response = mockMvc.perform(get("/api/UCSBSubjects/all"))
@@ -256,7 +256,7 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
 
         // assert
 
-        verify(uCSBSubjectRepository, times(1)).findAll();
+        verify(UCSBSubjectRepository, times(1)).findAll();
         String expectedJson = mapper.writeValueAsString(expectedUCSBSubject);
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
@@ -264,7 +264,7 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
 
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_uCSBSubject_post__user_logged_in() throws Exception {
+    public void api_UCSBSubject_post__user_logged_in() throws Exception {
         // arrange
 
         //User u = currentUserService.getCurrentUser().getUser();
@@ -279,7 +279,7 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
                 .id(0L)
                 .build();
 
-        when(uCSBSubjectRepository.save(eq(expectedUCSBSubject))).thenReturn(expectedUCSBSubject);
+        when(UCSBSubjectRepository.save(eq(expectedUCSBSubject))).thenReturn(expectedUCSBSubject);
 
         // act
         MvcResult response = mockMvc.perform(
@@ -288,7 +288,7 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
                 .andExpect(status().isOk()).andReturn();
 
         // assert
-        verify(uCSBSubjectRepository, times(1)).save(expectedUCSBSubject);
+        verify(UCSBSubjectRepository, times(1)).save(expectedUCSBSubject);
         String expectedJson = mapper.writeValueAsString(expectedUCSBSubject);
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
