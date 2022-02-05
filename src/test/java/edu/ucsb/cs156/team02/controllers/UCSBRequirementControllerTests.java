@@ -32,16 +32,24 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
     @MockBean
     UserRepository userRepository;
 
+    /* /api/UCSBRequirements/all */
+
+    @Test
+    public void api_requirements_stranger_does_get_all() throws Exception {
+        mockMvc.perform(get("/api/UCSBRequirements/all"))
+            .andExpect(status().is(403));
+    }
+
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_requirements_user_does_list_all() throws Exception {
+    public void api_requirements_user_does_get_all() throws Exception {
         mockMvc.perform(get("/api/UCSBRequirements/all"))
             .andExpect(status().is(403));
     }
 
     @WithMockUser(roles = { "ADMIN" })
     @Test
-    public void api_requirements_admin_get_all() throws Exception {
+    public void api_requirements_admin_does_get_all() throws Exception {
         UCSBRequirement dummy = UCSBRequirement.dummy(0);
         UCSBRequirement another = UCSBRequirement.dummy(1);
 
@@ -61,23 +69,31 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
         assertEquals(expectedJson, responseString);
     }
 
+    /* /api/UCSBRequirements/post */
+
+    final static String somePost = "/api/UCSBRequirements/post?"
+        + "requirementCode=AMH"
+        + "&requirementTranslation=American History and Institution"
+        + "&collegeCode=UCSB"
+        + "&objCode=UG"
+        + "&courseCount=1"
+        + "&units=4"
+        + "&inactive=true";
+
+    @Test
+    public void api_requirements_stranger_does_post_requirement() throws Exception {
+        mockMvc.perform(post(somePost))
+            .andExpect(status().is(403));
+    }
+
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_requirements_user_put_requirement() throws Exception {
+    public void api_requirements_user_does_post_requirement() throws Exception {
         UCSBRequirement requirement = UCSBRequirement.dummy(0);
 
         when(repository.save(eq(requirement))).thenReturn(requirement);
 
         // There's got to be a better way than manually encoding URL parameters.
-
-        final String somePost = "/api/UCSBRequirements/post?"
-            + "requirementCode=AMH"
-            + "&requirementTranslation=American History and Institution"
-            + "&collegeCode=UCSB"
-            + "&objCode=UG"
-            + "&courseCount=1"
-            + "&units=4"
-            + "&inactive=true";
 
         MvcResult response = mockMvc.perform(
                 post(somePost)
