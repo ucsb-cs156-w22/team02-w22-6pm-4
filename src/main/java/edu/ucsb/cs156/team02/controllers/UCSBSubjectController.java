@@ -75,43 +75,46 @@ public class UCSBSubjectController extends ApiController {
     //     return UCSBSubject;
     // }
 
-    // @ApiOperation(value = "Get a single UCSBSubject (if it belongs to current user)")
-    // @PreAuthorize("hasRole('ROLE_USER')")
-    // @GetMapping("")
-    // public ResponseEntity<String> getUCSBSubjectById(
-    //         @ApiParam("id") @RequestParam Long id) throws JsonProcessingException {
-    //     loggingService.logMethod();
-    //     // UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
+     @ApiOperation(value = "Get a single UCSBSubject (if it belongs to current user)")
+     @PreAuthorize("hasRole('ROLE_USER')")
+     @GetMapping("")
+     public ResponseEntity<String> getUCSBSubjectById(
+             @ApiParam("id") @RequestParam Long id) throws JsonProcessingException {
+         loggingService.logMethod();
+          UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
 
-    //     // toe = doesUCSBSubjectExist(toe);
-    //     // if (toe.error != null) {
-    //     //     return toe.error;
-    //     // }
-    //     // toe = doesUCSBSubjectBelongToCurrentUser(toe);
-    //     // if (toe.error != null) {
-    //     //     return toe.error;
-    //     // }
-    //     String body = mapper.writeValueAsString(toe.UCSBSubject);
-    //     return ResponseEntity.ok().body(body);
-    // }
+          toe = doesUCSBSubjectExist(toe);
+          if (toe.error != null) {
+              return toe.error;
+          }
+          toe = doesUCSBSubjectBelongToCurrentUser(toe);
+          if (toe.error != null) {
+              return toe.error;
+          }
+         String body = mapper.writeValueAsString(toe.UCSBSubject);
+         return ResponseEntity.ok().body(body);
+     }
 
-    // @ApiOperation(value = "Get a single UCSBSubject (no matter who it belongs to, admin only)")
-    // @PreAuthorize("hasRole('ROLE_ADMIN')")
-    // @GetMapping("/admin")
-    // public ResponseEntity<String> getUCSBSubjectById_admin(
-    //         @ApiParam("id") @RequestParam Long id) throws JsonProcessingException {
-    //     loggingService.logMethod();
+     @ApiOperation(value = "Get a single UCSBSubject (no matter who it belongs to, admin only)")
+     @PreAuthorize("hasRole('ROLE_ADMIN')")
+     @GetMapping("/admin")
+     public ResponseEntity<String> getUCSBSubjectById_admin(
+             @ApiParam("id") @RequestParam Long id) throws JsonProcessingException {
+         loggingService.logMethod();
 
-    //     UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
+         UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
 
-    //     toe = doesUCSBSubjectExist(toe);
-    //     if (toe.error != null) {
-    //         return toe.error;
-    //     }
+         toe = doesUCSBSubjectExist(toe);
+         if (toe.error != null) {
+             return toe.error;
+         }
 
-    //     String body = mapper.writeValueAsString(toe.UCSBSubject);
-    //     return ResponseEntity.ok().body(body);
-    // }
+         String body = mapper.writeValueAsString(toe.UCSBSubject);
+         return ResponseEntity.ok().body(body);
+     }
+
+
+
 
     @ApiOperation(value = "Create a new UCSBSubject")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -157,60 +160,61 @@ public class UCSBSubjectController extends ApiController {
 
     // }
 
-    // @ApiOperation(value = "Update a single todo (if it belongs to current user)")
-    // @PreAuthorize("hasRole('ROLE_USER')")
-    // @PutMapping("")
-    // public ResponseEntity<String> putTodoById(
-    //         @ApiParam("id") @RequestParam Long id,
-    //         @RequestBody @Valid Todo incomingTodo) throws JsonProcessingException {
-    //     loggingService.logMethod();
+     //@ApiOperation(value = "Update a single UCSBSubject (if it belongs to current user)")
+     //@PreAuthorize("hasRole('ROLE_USER')")
+     //@PutMapping("")
+     //public ResponseEntity<String> putUCSBSubjectById(
+             //@ApiParam("id") @RequestParam Long id,
+             //@RequestBody @Valid UCSBSubject incomingUCSBSubject) throws JsonProcessingException {
+         //loggingService.logMethod();
 
-    //     CurrentUser currentUser = getCurrentUser();
-    //     User user = currentUser.getUser();
+         //CurrentUser currentUser = getCurrentUser();
+         //User user = currentUser.getUser();
 
-    //     TodoOrError toe = new TodoOrError(id);
+         //UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
 
-    //     toe = doesTodoExist(toe);
-    //     if (toe.error != null) {
-    //         return toe.error;
-    //     }
-    //     toe = doesTodoBelongToCurrentUser(toe);
-    //     if (toe.error != null) {
-    //         return toe.error;
-    //     }
+         //toe = doesUCSBSubjectExist(toe);
+         //if (toe.error != null) {
+             //return toe.error;
+         //}
+         //toe = doesUCSBSubjectBelongToCurrentUser(toe);
+         //if (toe.error != null) {
+             //return toe.error;
+         //}
 
-    //     incomingTodo.setUser(user);
-    //     todoRepository.save(incomingTodo);
+         //incomingUCSBSubject.setUser(user);
+         //UCSBSubjectRepository.save(incomingUCSBSubject);
 
-    //     String body = mapper.writeValueAsString(incomingTodo);
-    //     return ResponseEntity.ok().body(body);
-    // }
+         //String body = mapper.writeValueAsString(incomingUCSBSubject);
+         //return ResponseEntity.ok().body(body);
+     //}
 
-    // @ApiOperation(value = "Update a single todo (regardless of ownership, admin only, can't change ownership)")
-    // @PreAuthorize("hasRole('ROLE_ADMIN')")
-    // @PutMapping("/admin")
-    // public ResponseEntity<String> putTodoById_admin(
-    //         @ApiParam("id") @RequestParam Long id,
-    //         @RequestBody @Valid Todo incomingTodo) throws JsonProcessingException {
-    //     loggingService.logMethod();
+     //@ApiOperation(value = "Update a single UCSBSubject (regardless of ownership, admin only, can't change ownership)")
+     //@PreAuthorize("hasRole('ROLE_ADMIN')")
+     //@PutMapping("/admin")
+     //public ResponseEntity<String> putUCSBSubjectById_admin(
+             //@ApiParam("id") @RequestParam Long id,
+             //@RequestBody @Valid UCSBSubject incomingUCSBSubject) throws JsonProcessingException {
+         //loggingService.logMethod();
 
-    //     TodoOrError toe = new TodoOrError(id);
+         //UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
 
-    //     toe = doesTodoExist(toe);
-    //     if (toe.error != null) {
-    //         return toe.error;
-    //     }
+         //toe = doesUCSBSubjectExist(toe);
+         //if (toe.error != null) {
+             //return toe.error;
+         //}
 
-    //     // Even the admin can't change the user; they can change other details
-    //     // but not that.
+         //// Even the admin can't change the user; they can change other details
+         //// but not that.
 
-    //     User previousUser = toe.todo.getUser();
-    //     incomingTodo.setUser(previousUser);
-    //     todoRepository.save(incomingTodo);
+         //User previousUser = toe.UCSBSubject.getUser();
+         //incomingUCSBSubject.setUser(previousUser);
+         //UCSBSubjectRepository.save(incomingUCSBSubject);
 
-    //     String body = mapper.writeValueAsString(incomingTodo);
-    //     return ResponseEntity.ok().body(body);
-    // }
+         //String body = mapper.writeValueAsString(incomingUCSBSubject);
+         //return ResponseEntity.ok().body(body);
+     //}
+
     @ApiOperation(value = "Delete a UCSBSubject owned by this user")
     @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("")

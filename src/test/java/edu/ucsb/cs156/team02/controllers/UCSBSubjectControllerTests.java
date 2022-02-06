@@ -47,34 +47,34 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
                 .andExpect(status().is(403));
     }
 
-//     @WithMockUser(roles = { "USER" })
-//     @Test
-//     public void api_todos_admin_all__user_logged_in__returns_403() throws Exception {
-//         mockMvc.perform(get("/api/ucsbSubjects/admin/all"))
-//                 .andExpect(status().is(403));
-//     }
+     @WithMockUser(roles = { "USER" })
+     @Test
+     public void api_UCSBSubject_admin_all__user_logged_in__returns_403() throws Exception {
+         mockMvc.perform(get("/api/UCSBSubjects/admin/all"))
+                 .andExpect(status().is(403));
+     }
 
-//     @WithMockUser(roles = { "USER" })
-//     @Test
-//     public void api_todos_admin__user_logged_in__returns_403() throws Exception {
-//         mockMvc.perform(get("/api/todos/admin?id=7"))
-//                 .andExpect(status().is(403));
-//     }
+     @WithMockUser(roles = { "USER" })
+     @Test
+     public void api_UCSBSubject_admin__user_logged_in__returns_403() throws Exception {
+         mockMvc.perform(get("/api/UCSBSubjects/admin?id=7"))
+                 .andExpect(status().is(403));
+     }
 
-//     @WithMockUser(roles = { "ADMIN" })
-//     @Test
-//     public void api_todos_admin_all__admin_logged_in__returns_200() throws Exception {
-//         mockMvc.perform(get("/api/todos/admin/all"))
-//                 .andExpect(status().isOk());
-//     }
+     @WithMockUser(roles = { "ADMIN" })
+     @Test
+     public void api_UCSBSubject_admin_all__admin_logged_in__returns_200() throws Exception {
+         mockMvc.perform(get("/api/UCSBSubjects/admin/all"))
+                 .andExpect(status().isOk());
+     }
 
-    // Authorization tests for /api/todos/all
+     //Authorization tests for /api/todos/all
 
-//     @Test
-//     public void api_todos_all__logged_out__returns_403() throws Exception {
-//         mockMvc.perform(get("/api/todos/all"))
-//                 .andExpect(status().is(403));
-//     }
+     @Test
+     public void api_todos_all__logged_out__returns_403() throws Exception {
+         mockMvc.perform(get("/api/todos/all"))
+                 .andExpect(status().is(403));
+     }
 
     @WithMockUser(roles = { "USER" })
     @Test

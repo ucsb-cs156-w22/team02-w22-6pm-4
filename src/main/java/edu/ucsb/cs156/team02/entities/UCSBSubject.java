@@ -25,6 +25,8 @@ public class UCSBSubject{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    //private User user;
+
     private String subjectCode;
     private String subjectTranslation;
     private String deptCode;
@@ -35,4 +37,7 @@ public class UCSBSubject{
     public long getId() {
       return id;
     }
+    //public void setUser(User user) {
+      //this.user = user;
+    //}
 }
