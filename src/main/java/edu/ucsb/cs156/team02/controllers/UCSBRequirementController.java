@@ -87,4 +87,28 @@ public class UCSBRequirementController extends ApiController
         String body = mapper.writeValueAsString(requirement);
         return ResponseEntity.ok().body(body);
     }
+
+    @ApiOperation(value = "Update a degree requirement.")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PutMapping("")
+    public ResponseEntity<String> putRequirement(
+        @ApiParam("id") @RequestParam Long id,
+        @RequestBody @Valid UCSBRequirement edited)
+        throws JsonProcessingException
+    {
+        loggingService.logMethod();
+
+        Optional<UCSBRequirement> requirement = repository.findById(id);
+
+        if (requirement.isEmpty()) {
+            return ResponseEntity.badRequest()
+                .body(String.format("id %d not found", id));
+        }
+
+        // Overwrite the requirement with the requirement in the body of the request.
+        repository.save(edited);
+
+        String body = mapper.writeValueAsString(edited);
+        return ResponseEntity.ok().body(body);
+    }
 }

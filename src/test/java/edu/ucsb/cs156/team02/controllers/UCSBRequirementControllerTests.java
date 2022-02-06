@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,7 +45,7 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
 
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_requirements_admin_does_get_all() throws Exception
+    public void api_requirements_user_does_get_all() throws Exception
     {
         UCSBRequirement dummy = UCSBRequirement.dummy(0);
         UCSBRequirement another = UCSBRequirement.dummy(1);
@@ -66,6 +67,9 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
     }
 
     /* /api/UCSBRequirements/post */
+
+    // There's got to be a better way than manually encoding URL parameters.
+    // Can't I just tell my dummy to encode itself? It's an Object.
 
     final static String somePost = "/api/UCSBRequirements/post?"
         + "requirementCode=AMH"
@@ -90,8 +94,6 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
         UCSBRequirement requirement = UCSBRequirement.dummy(0);
 
         when(repository.save(eq(requirement))).thenReturn(requirement);
-
-        // There's got to be a better way than manually encoding URL parameters.
 
         MvcResult response = mockMvc.perform(
                 post(somePost)
@@ -146,6 +148,85 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
         verify(repository, times(1)).findById(eq(42L));
 
         String expectedJson = "id 42 not found";
+        String responseString = response.getResponse().getContentAsString();
+
+        assertEquals(expectedJson, responseString);
+    }
+
+    /* /api/UCSBRequirements?id= (with json body!) */
+
+    @Test
+    public void api_requirements_stranger_does_put() throws Exception
+    {
+        UCSBRequirement requirement = UCSBRequirement.dummy(42);
+
+        String requestBody = mapper.writeValueAsString(requirement);
+
+        mockMvc.perform(
+            put("/api/UCSBRequirements?id=0")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()) // <- ????
+        )
+        .andExpect(status().is(403));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_requirements_user_does_put() throws Exception
+    {
+        UCSBRequirement requirement = UCSBRequirement.dummy(42);
+
+        when(repository.findById(eq(42L))).thenReturn(Optional.of(requirement));
+
+        UCSBRequirement edited = UCSBRequirement.dummy(42);
+        edited.setUnits(24);
+
+        when(repository.save(eq(edited))).thenReturn(edited);
+
+        String requestBody = mapper.writeValueAsString(edited);
+
+        MvcResult response = mockMvc.perform(
+            put("/api/UCSBRequirements?id=42")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()) // <- ????
+        )
+        .andExpect(status().is(200))
+        .andReturn();
+
+        verify(repository, times(1)).findById(42L);
+        verify(repository, times(1)).save(edited);
+
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(requestBody, responseString);
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_requirements_user_does_put_with_wrong_id() throws Exception
+    {
+        when(repository.findById(eq(41L))).thenReturn(Optional.empty());
+
+        UCSBRequirement edited = UCSBRequirement.dummy(42);
+        edited.setUnits(24);
+
+        when(repository.save(eq(edited))).thenReturn(edited);
+
+        String requestBody = mapper.writeValueAsString(edited);
+
+        MvcResult response = mockMvc.perform(
+            put("/api/UCSBRequirements?id=41")
+            .contentType(MediaType.APPLICATION_JSON)
+            .characterEncoding("utf-8")
+            .content(requestBody)
+            .with(csrf()) // <- ????
+        )
+        .andExpect(status().isBadRequest()).andReturn();
+
+        String expectedJson = "id 41 not found";
         String responseString = response.getResponse().getContentAsString();
 
         assertEquals(expectedJson, responseString);
