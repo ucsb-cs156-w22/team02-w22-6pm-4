@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
+
 public interface UCSBSubjectRepository extends CrudRepository<UCSBSubject, Long>{
     //Omitted findBySubject, as it doesn't have a corresponding member.
 }
