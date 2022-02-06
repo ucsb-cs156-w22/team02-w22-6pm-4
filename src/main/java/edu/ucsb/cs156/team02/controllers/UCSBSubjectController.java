@@ -39,15 +39,15 @@ public class UCSBSubjectController extends ApiController {
      * along with the error messages pertaining to those situations. It
      * bundles together the state needed for those checks.
      */
-    // public class UCSBSubjectOrError {
-    //     Long id;
-    //     UCSBSubject UCSBSubject;
-    //     ResponseEntity<String> error;
+     public class UCSBSubjectOrError {
+         Long id;
+         UCSBSubject UCSBSubject;
+         ResponseEntity<String> error;
 
-    //     public UCSBSubjectOrError(Long id) {
-    //         this.id = id;
-    //     }
-    // }
+         public UCSBSubjectOrError(Long id) {
+             this.id = id;
+         }
+     }
 
     @Autowired
     UCSBSubjectRepository UCSBSubjectRepository;
@@ -137,29 +137,6 @@ public class UCSBSubjectController extends ApiController {
         return savedUCSBSubject;
     }
 
-    // @ApiOperation(value = "Delete a Todo owned by this user")
-    // @PreAuthorize("hasRole('ROLE_USER')")
-    // @DeleteMapping("")
-    // public ResponseEntity<String> deleteTodo(
-    //         @ApiParam("id") @RequestParam Long id) {
-    //     loggingService.logMethod();
-
-    //     TodoOrError toe = new TodoOrError(id);
-
-    //     toe = doesTodoExist(toe);
-    //     if (toe.error != null) {
-    //         return toe.error;
-    //     }
-
-    //     toe = doesTodoBelongToCurrentUser(toe);
-    //     if (toe.error != null) {
-    //         return toe.error;
-    //     }
-    //     todoRepository.deleteById(id);
-    //     return ResponseEntity.ok().body(String.format("todo with id %d deleted", id));
-
-    // }
-
     // @ApiOperation(value = "Delete another user's todo")
     // @PreAuthorize("hasRole('ROLE_ADMIN')")
     // @DeleteMapping("/admin")
@@ -234,7 +211,48 @@ public class UCSBSubjectController extends ApiController {
     //     String body = mapper.writeValueAsString(incomingTodo);
     //     return ResponseEntity.ok().body(body);
     // }
+    @ApiOperation(value = "Delete a UCSBSubject owned by this user")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @DeleteMapping("")
+    public ResponseEntity<String> deleteUCSBSubject(
+            @ApiParam("id") @RequestParam Long id) {
+        loggingService.logMethod();
 
+        UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
+
+        toe = doesUCSBSubjectExist(toe);
+        if (toe.error != null) {
+            return toe.error;
+        }
+
+        toe = doesUCSBSubjectBelongToCurrentUser(toe);
+        if (toe.error != null) {
+            return toe.error;
+        }
+        UCSBSubjectRepository.deleteById(id);
+        return ResponseEntity.ok().body(String.format("UCSBSubject with id %d deleted", id));
+
+    }
+
+    @ApiOperation(value = "Delete another user's UCSBSubject")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/admin")
+    public ResponseEntity<String> deleteUCSBSubject_Admin(
+            @ApiParam("id") @RequestParam Long id) {
+        loggingService.logMethod();
+
+        UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
+
+        toe = doesUCSBSubjectExist(toe);
+        if (toe.error != null) {
+            return toe.error;
+        }
+
+        UCSBSubjectRepository.deleteById(id);
+
+        return ResponseEntity.ok().body(String.format("UCSBSubject with id %d deleted", id));
+
+    }
     /**
      * Pre-conditions: toe.id is value to look up, toe.todo and toe.error are null
      * 
@@ -244,19 +262,19 @@ public class UCSBSubjectController extends ApiController {
      * value to
      * report this error condition.
      */
-    // public UCSBSubjectOrError doesUCSBSubjectExist(UCSBSubjectOrError toe) {
+     public UCSBSubjectOrError doesUCSBSubjectExist(UCSBSubjectOrError toe) {
 
-    //     Optional<UCSBSubject> optionalUCSBSubject = UCSBSubjectRepository.findById(toe.id);
+         Optional<UCSBSubject> optionalUCSBSubject = UCSBSubjectRepository.findById(toe.id);
 
-    //     if (optionalUCSBSubject.isEmpty()) {
-    //         toe.error = ResponseEntity
-    //                 .badRequest()
-    //                 .body(String.format("UCSBSubject with id %d not found", toe.id));
-    //     } else {
-    //         toe.UCSBSubject = optionalUCSBSubject.get();
-    //     }
-    //     return toe;
-    // }
+         if (optionalUCSBSubject.isEmpty()) {
+             toe.error = ResponseEntity
+                     .badRequest()
+                     .body(String.format("UCSBSubject with id %d not found", toe.id));
+         } else {
+             toe.UCSBSubject = optionalUCSBSubject.get();
+         }
+         return toe;
+     }
 
     /**
      * Pre-conditions: toe.todo is non-null and refers to the todo with id toe.id,
@@ -266,20 +284,21 @@ public class UCSBSubjectController extends ApiController {
      * Otherwise error is a suitable
      * return value.
      */
-    // public UCSBSubjectOrError doesUCSBSubjectBelongToCurrentUser(UCSBSubjectOrError toe) {
-    //     CurrentUser currentUser = getCurrentUser();
-    //     log.info("currentUser={}", currentUser);
+     public UCSBSubjectOrError doesUCSBSubjectBelongToCurrentUser(UCSBSubjectOrError toe) {
+         CurrentUser currentUser = getCurrentUser();
+         log.info("currentUser={}", currentUser);
 
-    //     Long currentUserId = currentUser.getUser().getId();
-    //     Long UCSBSubjectUserId = toe.UCSBSubject.getUser().getId();
-    //     log.info("currentUserId={} UCSBSubjectUserId={}", currentUserId, UCSBSubjectUserId);
+         
+         Long currentUserId = currentUser.getUser().getId();
+         Long UCSBSubjectUserId = toe.UCSBSubject.getId();
+         log.info("currentUserId={} UCSBSubjectUserId={}", currentUserId, UCSBSubjectUserId);
 
-    //     if (UCSBSubjectUserId != currentUserId) {
-    //         toe.error = ResponseEntity
-    //                 .badRequest()
-    //                 .body(String.format("UCSBSubject with id %d not found", toe.id));
-    //     }
-    //     return toe;
-    // }
+         if (UCSBSubjectUserId != currentUserId) {
+             toe.error = ResponseEntity
+                     .badRequest()
+                     .body(String.format("UCSBSubject with id %d not found", toe.id));
+         }
+         return toe;
+     }
 
 }
