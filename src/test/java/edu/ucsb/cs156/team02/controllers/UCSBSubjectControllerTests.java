@@ -44,15 +44,61 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
     @Test
     public void api_UCSBSubject_all__logged_out__returns_403() throws Exception {
         mockMvc.perform(get("/api/UCSBSubjects/all"))
-                .andExpect(status().is(403));
+               .andExpect(status().is(403));
     }
 
-     @WithMockUser(roles = { "USER" })
-     @Test
-     public void api_UCSBSubject_admin_all__user_logged_in__returns_403() throws Exception {
-         mockMvc.perform(get("/api/UCSBSubjects/admin/all"))
-                 .andExpect(status().is(403));
-     }
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void test_api_UCSBSubject_postUCSBSubject() throws Exception {
+      mockMvc.perform(post("/api/UCSBSubjects/post?collegeCode=sd&deptCode=sd&inactive=false&relatedDeptCode=sd&subjectCode=sd&subjectTranslation=sd"))
+             .andExpect(status().isOk());
+    }
+
+    @Test
+    public void test_api_UCSBSubject_getUCSBSubject() throws Exception {
+      mockMvc.perform(post("/api/UCSBSubjects/all"))
+             .andExpect(status().is(403));
+    }
+    
+
+
+    @Test
+    public void test_api_UCSBSubject_deleteAll() throws Exception {
+      UCSBSubject d1 = UCSBSubject.dummySubject(1);
+
+
+      
+
+    }
+    //@WithMockUser(roles = { "USER" })
+    //@Test
+    //public void api_UCSBSubject_admin_return_all() throws Exception
+    //{
+        //UCSBSubject d1 = UCSBSubject.dummySubject(0);
+        //UCSBSubject d2 = UCSBSubject.dummySubject(1);
+
+        //ArrayList<UCSBSubject> subjects = new ArrayList<>();
+        //subjects.addAll(Arrays.asList(d1,d2));
+
+        //when(UCSBSubjectRepository.findAll()).thenReturn(subjects);
+
+        //MvcResult response = mockMvc.perform(get("/api/UCSBSubjects/all"))
+            //.andExpect(status().isOk()).andReturn();
+
+        //verify(UCSBSubjectRepository, times(1)).findAll();
+
+        //String expectedJson = mapper.writeValueAsString(subjects);
+        //String responseString = response.getResponse().getContentAsString();
+
+        //assertEquals(expectedJson, responseString);
+    //}
+
+     //@WithMockUser(roles = { "USER" })
+     //@Test
+     //public void api_UCSBSubject_admin_all__user_logged_in__returns_403() throws Exception {
+         //mockMvc.perform(get("/api/UCSBSubjects/admin/all"))
+                 //.andExpect(status().is(403));
+     //}
 
      @WithMockUser(roles = { "USER" })
      @Test
@@ -61,20 +107,20 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
                  .andExpect(status().is(403));
      }
 
-     @WithMockUser(roles = { "ADMIN" })
-     @Test
-     public void api_UCSBSubject_admin_all__admin_logged_in__returns_200() throws Exception {
-         mockMvc.perform(get("/api/UCSBSubjects/admin/all"))
-                 .andExpect(status().isOk());
-     }
+     //@WithMockUser(roles = { "ADMIN" })
+     //@Test
+     //public void api_UCSBSubject_admin_all__admin_logged_in__returns_200() throws Exception {
+         //mockMvc.perform(get("/api/UCSBSubjects/admin/all"))
+                 //.andExpect(status().isOk());
+     //}
 
      //Authorization tests for /api/todos/all
 
-     @Test
-     public void api_todos_all__logged_out__returns_403() throws Exception {
-         mockMvc.perform(get("/api/todos/all"))
-                 .andExpect(status().is(403));
-     }
+     //@Test
+     //public void api_todos_all__logged_out__returns_403() throws Exception {
+         //mockMvc.perform(get("/api/todos/all"))
+                 //.andExpect(status().is(403));
+     //}
 
     @WithMockUser(roles = { "USER" })
     @Test

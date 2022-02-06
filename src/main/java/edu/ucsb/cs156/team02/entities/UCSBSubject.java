@@ -40,4 +40,13 @@ public class UCSBSubject{
     //public void setUser(User user) {
       //this.user = user;
     //}
+    public static UCSBSubject dummySubject(long id) {
+      UCSBSubject subject = new UCSBSubject();
+      subject.id = id;
+      subject.subjectCode = "GPS";
+      subject.subjectTranslation = "Global Peace and Security";
+      subject.collegeCode = "UCSB";
+      subject.inactive = true;
+      return subject;
+    }
 }
