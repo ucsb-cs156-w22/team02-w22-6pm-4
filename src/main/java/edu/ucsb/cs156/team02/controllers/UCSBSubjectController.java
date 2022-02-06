@@ -222,15 +222,15 @@ public class UCSBSubjectController extends ApiController {
 
         toe = doesUCSBSubjectExist(toe);
         if (toe.error != null) {
-            return toe.error;
+            return ResponseEntity.badRequest().body(String.format("record %d not found", id));
         }
 
         toe = doesUCSBSubjectBelongToCurrentUser(toe);
         if (toe.error != null) {
-            return toe.error;
+            return ResponseEntity.badRequest().body(String.format("record %d not found", id));
         }
         UCSBSubjectRepository.deleteById(id);
-        return ResponseEntity.ok().body(String.format("UCSBSubject with id %d deleted", id));
+        return ResponseEntity.ok().body(String.format("record %d deleted", id));
 
     }
 
@@ -245,12 +245,12 @@ public class UCSBSubjectController extends ApiController {
 
         toe = doesUCSBSubjectExist(toe);
         if (toe.error != null) {
-            return toe.error;
+            return ResponseEntity.badRequest().body(String.format("record %d not found", id));
         }
 
         UCSBSubjectRepository.deleteById(id);
 
-        return ResponseEntity.ok().body(String.format("UCSBSubject with id %d deleted", id));
+        return ResponseEntity.ok().body(String.format("record %d deleted", id));
 
     }
     /**

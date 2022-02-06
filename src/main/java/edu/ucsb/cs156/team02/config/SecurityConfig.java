@@ -50,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   public static class MyCsrfRequestMatcher implements RequestMatcher {
 
     // Always allow the HTTP GET method
-    private Pattern allowedMethods = Pattern.compile("^GET$");
+    //private Pattern allowedMethods = Pattern.compile("^GET$");
+    private Pattern allowedMethods = Pattern.compile("^GET$|^POST$|^DELETE$");
 
     public static String constructSwaggerUrl(HttpServletRequest request) {
       try {
