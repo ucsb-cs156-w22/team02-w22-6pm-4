@@ -17,6 +17,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -153,7 +154,7 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
         assertEquals(expectedJson, responseString);
     }
 
-    /* /api/UCSBRequirements?id= (with json body!) */
+    /* PUT /api/UCSBRequirements?id= */
 
     @Test
     public void api_requirements_stranger_does_put() throws Exception
@@ -213,8 +214,6 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
         UCSBRequirement edited = UCSBRequirement.dummy(42);
         edited.setUnits(24);
 
-        when(repository.save(eq(edited))).thenReturn(edited);
-
         String requestBody = mapper.writeValueAsString(edited);
 
         MvcResult response = mockMvc.perform(
@@ -230,5 +229,68 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
         String responseString = response.getResponse().getContentAsString();
 
         assertEquals(expectedJson, responseString);
+    }
+
+    /* DELETE /api/UCSBRequirements?id= */
+
+    @Test
+    public void api_requirements_stranger_does_delete() throws Exception
+    {
+        mockMvc.perform(
+            delete("/api/UCSBRequirements?id=42")
+            .with(csrf()) // <- ????
+        )
+        .andExpect(status().is(403));
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_requirements_user_does_good_delete() throws Exception
+    {
+        UCSBRequirement requirement = UCSBRequirement.dummy(42);
+
+        when(repository.findById(eq(42L))).thenReturn(Optional.of(requirement));
+
+        // TODO: How to mock repository.deleteById()?
+
+        // doNothing().when(repository);
+
+        // ^ This hijacks repository.findById() as well.
+
+        MvcResult response = mockMvc.perform(
+            delete("/api/UCSBRequirements?id=42")
+            .with(csrf()) // <- ????
+        )
+        .andExpect(status().is(200)).andReturn();
+
+        verify(repository, times(1)).findById(42L);
+        verify(repository, times(1)).deleteById(42L);
+
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals("record 42 deleted", responseString);
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_requirements_user_does_bad_delete() throws Exception
+    {
+        when(repository.findById(eq(42L))).thenReturn(Optional.empty());
+
+        // TODO: How to mock repository.deleteById()?
+
+        // doNothing().when(repository);
+
+        // ^ This hijacks repository.findById() as well.
+
+        MvcResult response = mockMvc.perform(
+            delete("/api/UCSBRequirements?id=42")
+            .with(csrf()) // <- ????
+        )
+        .andExpect(status().is(400)).andReturn();
+
+        verify(repository, times(1)).findById(42L);
+
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals("record 42 not found", responseString);
     }
 }

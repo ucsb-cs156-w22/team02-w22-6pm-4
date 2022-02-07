@@ -111,4 +111,23 @@ public class UCSBRequirementController extends ApiController
         String body = mapper.writeValueAsString(edited);
         return ResponseEntity.ok().body(body);
     }
+
+    @ApiOperation(value = "Delete a degree requirement.")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @DeleteMapping("")
+    public ResponseEntity<String> deleteRequest(
+        @ApiParam("id") @RequestParam Long id)
+    {
+        loggingService.logMethod();
+
+        Optional<UCSBRequirement> requirement = repository.findById(id);
+
+        if (requirement.isEmpty()) {
+            return ResponseEntity.badRequest()
+                .body(String.format("record %d not found", id));
+        }
+
+        repository.deleteById(id);
+        return ResponseEntity.ok().body(String.format("record %d deleted", id));
+    }
 }
