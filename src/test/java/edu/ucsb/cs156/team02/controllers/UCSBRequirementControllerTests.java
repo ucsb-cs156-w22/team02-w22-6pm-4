@@ -247,15 +247,11 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
     @Test
     public void api_requirements_user_does_good_delete() throws Exception
     {
-        UCSBRequirement requirement = UCSBRequirement.dummy(42);
+        UCSBRequirement requirement = UCSBRequirement.dummy(42L);
 
         when(repository.findById(eq(42L))).thenReturn(Optional.of(requirement));
 
-        // TODO: How to mock repository.deleteById()?
-
-        // doNothing().when(repository);
-
-        // ^ This hijacks repository.findById() as well.
+        doNothing().when(repository).deleteById(42L);
 
         MvcResult response = mockMvc.perform(
             delete("/api/UCSBRequirements?id=42")
@@ -275,12 +271,6 @@ public class UCSBRequirementControllerTests extends ControllerTestCase
     public void api_requirements_user_does_bad_delete() throws Exception
     {
         when(repository.findById(eq(42L))).thenReturn(Optional.empty());
-
-        // TODO: How to mock repository.deleteById()?
-
-        // doNothing().when(repository);
-
-        // ^ This hijacks repository.findById() as well.
 
         MvcResult response = mockMvc.perform(
             delete("/api/UCSBRequirements?id=42")
