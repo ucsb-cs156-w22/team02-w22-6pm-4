@@ -46,6 +46,8 @@ public class UCSBSubject{
       subject.subjectCode = "GPS";
       subject.subjectTranslation = "Global Peace and Security";
       subject.collegeCode = "UCSB";
+      subject.deptCode = "GPS";
+      subject.relatedDeptCode = "GPS";
       subject.inactive = true;
       return subject;
     }
