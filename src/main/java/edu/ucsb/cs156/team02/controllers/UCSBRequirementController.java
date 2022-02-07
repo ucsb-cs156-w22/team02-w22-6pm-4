@@ -106,6 +106,7 @@ public class UCSBRequirementController extends ApiController
         }
 
         // Overwrite the requirement with the requirement in the body of the request.
+        edited.setId(id);
         repository.save(edited);
 
         String body = mapper.writeValueAsString(edited);
