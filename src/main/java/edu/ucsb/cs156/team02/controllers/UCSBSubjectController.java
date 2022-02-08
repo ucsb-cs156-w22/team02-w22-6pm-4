@@ -65,7 +65,7 @@ public class UCSBSubjectController extends ApiController {
         return UCSBSubject;
     }
 
-     @ApiOperation(value = "Get a single UCSBSubject (if it belongs to current user)")
+     @ApiOperation(value = "Get a single UCSBSubject")
      @PreAuthorize("hasRole('ROLE_USER')")
      @GetMapping("")
      public ResponseEntity<String> getUCSBSubjectById(
@@ -107,7 +107,7 @@ public class UCSBSubjectController extends ApiController {
         return savedUCSBSubject;
     }
 
-    @ApiOperation(value = "Delete a UCSBSubject owned by this user")
+    @ApiOperation(value = "Delete a UCSBSubject")
     @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("")
     public ResponseEntity<String> deleteUCSBSubject(
