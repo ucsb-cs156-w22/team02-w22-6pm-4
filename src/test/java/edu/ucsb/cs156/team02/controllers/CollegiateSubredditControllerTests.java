@@ -116,4 +116,41 @@ public class CollegiateSubredditControllerTests extends ControllerTestCase {
         String responseString = response.getResponse().getContentAsString();
         assertEquals(expectedJson, responseString);
     }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_collegiateSubreddits_user_logged_in_returns_a_collegiateSubreddit_that_exists() throws Exception {
+            
+        // arrange
+
+        CollegiateSubreddit collegeSubreddit1 = CollegiateSubreddit.builder().name("collegeSubreddit 1").location("collegeSubreddit 1").subreddit("collegeSubreddit 1").id(7L).build();
+        when(collegiateSubredditRepository.findById(eq(7L))).thenReturn(Optional.of(collegeSubreddit1));
+
+        MvcResult response = mockMvc.perform(get("/api/collegiateSubreddits?id=7"))
+                .andExpect(status().isOk()).andReturn();
+
+        verify(collegiateSubredditRepository, times(1)).findById(eq(7L));
+        String expectedJson = mapper.writeValueAsString(collegeSubreddit1);
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_collegiateSubreddits_user_logged_in_search_for_collegiateSubreddit_that_does_not_exist() throws Exception {
+        
+        //arrange
+
+        when(collegiateSubredditRepository.findById(eq(7L))).thenReturn(Optional.empty());
+
+        //act
+        MvcResult response = mockMvc.perform(get("/api/collegiateSubreddits?id=7"))
+                .andExpect(status().isBadRequest()).andReturn();
+
+        //assert
+
+        verify(collegiateSubredditRepository, times(1)).findById(eq(7L));
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals("CollegiateSubreddit with id 7 not found", responseString);
+    }
 }

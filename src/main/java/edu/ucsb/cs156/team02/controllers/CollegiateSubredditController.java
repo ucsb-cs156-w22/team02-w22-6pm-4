@@ -78,7 +78,7 @@ public class CollegiateSubredditController extends ApiController {
     }
 
     //Checks if the collegiateSubreddit is valid.
-    //If the CollegiateSubreddit with toe.id exists, then toe.todo now refers to it.
+    //If the CollegiateSubreddit with toe.id exists, then toe.collegeSubreddit now refers to it.
     public CollegiateSubredditOrError doesCollegiateSubredditExist(
             CollegiateSubredditOrError toe){
         Optional<CollegiateSubreddit> optionalCollegiateSubreddit = collegiateSubredditRepository.findById(toe.id);
@@ -93,6 +93,8 @@ public class CollegiateSubredditController extends ApiController {
         return toe;
     }
 
+    //We ended up not needing this. Kinda doesn't make any sense. - Evan
+    /** 
     public CollegiateSubredditOrError doesCollegiateSubredditBelongToCurrentUser(
             CollegiateSubredditOrError toe){
         CurrentUser currentUser = getCurrentUser();
@@ -113,6 +115,7 @@ public class CollegiateSubredditController extends ApiController {
         }
         return toe;
     }
+    **/
 
     //ADD GET
     @ApiOperation(value = "Get a single CollegiateSubreddit")
@@ -127,10 +130,12 @@ public class CollegiateSubredditController extends ApiController {
         if (toe.error != null) {
             return toe.error;
         }
+        /** //This doesn't make sense, collegiateSubreddits don't belong to anyone.
         toe = doesCollegiateSubredditBelongToCurrentUser(toe);
         if (toe.error != null) {
             return toe.error;
         }
+        **/
         String body = mapper.writeValueAsString(toe.collegeSubreddit);
         return ResponseEntity.ok().body(body);
     }
