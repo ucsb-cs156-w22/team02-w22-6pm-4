@@ -77,7 +77,7 @@ public class CollegiateSubredditController extends ApiController {
         return savedcollegiateSubs;
     }
 
-    @ApiOperation(value = "Delete a CollegiateSubreddit owned by this user")
+    @ApiOperation(value = "Delete a CollegiateSubreddit")
     @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("")
     public ResponseEntity<String> deleteCollegiateSubreddit(
@@ -93,7 +93,7 @@ public class CollegiateSubredditController extends ApiController {
 
    
         collegiateSubredditRepository.deleteById(id);
-        return ResponseEntity.ok().body(String.format("Collegiate Subreddit with id %d deleted", id));
+        return ResponseEntity.ok().body(String.format("record with id %d deleted", id));
 
     }
 
@@ -133,7 +133,7 @@ public class CollegiateSubredditController extends ApiController {
         if (optionalCollegiateSubreddit.isEmpty()) {
             toe.error = ResponseEntity
                     .badRequest()
-                    .body(String.format("collegiateSubreddit with id %d not found", toe.id));
+                    .body(String.format("record with id %d not found", toe.id));
         } else {
             toe.collegiateSubreddit = optionalCollegiateSubreddit.get();
         }
