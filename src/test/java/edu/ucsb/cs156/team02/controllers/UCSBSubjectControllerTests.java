@@ -81,6 +81,26 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
 
     @WithMockUser(roles = { "USER" })
     @Test
+    public void test_api_UCSBSubject_postUCSBSubject() throws Exception {
+        UCSBSubject subject = UCSBSubject.dummySubject(0);
+
+        when(repository.save(eq(subject))).thenReturn(subject);
+
+        MvcResult response = mockMvc.perform(
+                post(POSTString)
+                .with(csrf()))
+                .andExpect(status().isOk()).andReturn();
+
+        verify(repository, times(1)).save(subject);
+
+        String expectedJson = mapper.writeValueAsString(subject);
+        String responseString = response.getResponse().getContentAsString();
+
+        assertEquals(expectedJson, responseString);
+    }
+
+    @WithMockUser(roles = { "USER" })
+    @Test
     public void test_api_UCSBSubject_getUCSBSubjectById_exist() throws Exception {
         UCSBSubject subject = UCSBSubject.dummySubject(42L);
         //repository.save(subject);
@@ -144,7 +164,7 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
 
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_UCSBSubject_delete_user_logged_in_nonExist() throws Exception {
+    public void test_api_UCSBSubject_delete_user_logged_in_nonExist() throws Exception {
         when(repository.findById(eq(42L))).thenReturn(Optional.empty());
 
         doNothing().when(repository).deleteById(42L);
@@ -160,5 +180,18 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
 
         String responseString = response.getResponse().getContentAsString();
         assertEquals("record 42 not found", responseString);
+    }
+
+
+    // test for getId();
+    @Test
+    public void test_UCSBSubjectGetId() {
+      UCSBSubject testSubject = new UCSBSubject(1L,"","","","","",false);
+
+      long id = testSubject.getId();
+
+      assertEquals(1L, id);
+      
+
     }
 }
