@@ -24,12 +24,12 @@ public class CollegiateSubreddit {
   private String location;
   private String subreddit;
 
-  public static CollegiateSubreddit dummy(long id) {
-    CollegiateSubreddit subreddits = new CollegiateSubreddit();
-    subreddits.id = id;
-    subreddits.name = "reddit";
-    subreddits.location = "location";
-    subreddits.subreddit = "subreddit";
-    return subreddits;
-}
+//   public static CollegiateSubreddit dummy(long id) {
+//     CollegiateSubreddit subreddits = new CollegiateSubreddit();
+//     subreddits.id = id;
+//     subreddits.name = "reddit";
+//     subreddits.location = "location";
+//     subreddits.subreddit = "subreddit";
+//     return subreddits;
+// }
 }
