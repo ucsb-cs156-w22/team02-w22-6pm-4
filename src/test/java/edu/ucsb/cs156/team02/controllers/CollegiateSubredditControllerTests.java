@@ -117,45 +117,67 @@ public class CollegiateSubredditControllerTests extends ControllerTestCase {
         assertEquals(expectedJson, responseString);
     }
 
+
+//     @Test
+//     public void api_requirements_stranger_does_delete() throws Exception
+//     {
+//         mockMvc.perform(
+//             delete("/api/collegiateSubreddits?id=123")
+//             .with(csrf()) // <- ????
+//         )
+//         .andExpect(status().is(403));
+//     }
+
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_collegiateSubreddits_user_logged_in_returns_a_collegiateSubreddit_that_exists() throws Exception {
-            
+    public void api_collegiateSubreddit__user_logged_in__delete_collegiateSubreddit() throws Exception {
         // arrange
 
-        CollegiateSubreddit collegeSubreddit1 = CollegiateSubreddit.builder().name("collegeSubreddit 1").location("collegeSubreddit 1").subreddit("collegeSubreddit 1").id(7L).build();
-        when(collegiateSubredditRepository.findById(eq(7L))).thenReturn(Optional.of(collegeSubreddit1));
+        //User u = currentUserService.getCurrentUser().getUser();
+        CollegiateSubreddit collegiateSubreddit1 = CollegiateSubreddit.builder().name("CollegiateSubreddit name").location("CollegiateSubreddit location").subreddit("CollegiateSubreddit ").id(123L).build();
+        when(collegiateSubredditRepository.findById(eq(123L))).thenReturn(Optional.of(collegiateSubreddit1));
 
-        MvcResult response = mockMvc.perform(get("/api/collegiateSubreddits?id=7"))
-                .andExpect(status().isOk()).andReturn();
-
-        verify(collegiateSubredditRepository, times(1)).findById(eq(7L));
-        String expectedJson = mapper.writeValueAsString(collegeSubreddit1);
+        // act
+        MvcResult response = mockMvc.perform(
+                delete("/api/collegiateSubreddits?id=123")
+                        .with(csrf()))
+                .andExpect(status().is(200)).andReturn();
+        
+        // assert
+        verify(collegiateSubredditRepository, times(1)).findById(123L);
+        verify(collegiateSubredditRepository, times(1)).deleteById(123L);
         String responseString = response.getResponse().getContentAsString();
-        assertEquals(expectedJson, responseString);
+        assertEquals("record with id 123 deleted", responseString);
+
+        
+
     }
 
     @WithMockUser(roles = { "USER" })
     @Test
-    public void api_collegiateSubreddits_user_logged_in_search_for_collegiateSubreddit_that_does_not_exist() throws Exception {
-        
-        //arrange
 
-        when(collegiateSubredditRepository.findById(eq(7L))).thenReturn(Optional.empty());
+    public void api_collegiateSubreddit__user_logged_in__delete_collegiateSubreddit_that_does_not_exist() throws Exception {
+        // arrange
 
-        //act
-        MvcResult response = mockMvc.perform(get("/api/collegiateSubreddits?id=7"))
+        User otherUser = User.builder().id(98L).build();
+        CollegiateSubreddit collegiateSubreddit1 = CollegiateSubreddit.builder().name("CollegiateSubreddit 1").location("CollegiateSubreddit 1").subreddit("CollegiateSubreddit 1").id(123L).build();
+        when(collegiateSubredditRepository.findById(eq(123L))).thenReturn(Optional.empty());
+
+        // act
+        MvcResult response = mockMvc.perform(
+                delete("/api/collegiateSubreddits?id=123")
+                        .with(csrf()))
                 .andExpect(status().isBadRequest()).andReturn();
 
-        //assert
-
-        verify(collegiateSubredditRepository, times(1)).findById(eq(7L));
+        // assert
+        verify(collegiateSubredditRepository, times(1)).findById(123L);
         String responseString = response.getResponse().getContentAsString();
-        assertEquals("CollegiateSubreddit with id 7 not found", responseString);
+        assertEquals("record with id 123 not found", responseString);
     }
 
-        //Test for the getID() method
-        @WithMockUser(roles = { "USER" })
+
+    //Test for the getID() method
+    @WithMockUser(roles = { "USER" })
     @Test
     public void api_collegiateSubreddits_return_own_id() throws Exception {
         CollegiateSubreddit collegiateSubreddit1 = CollegiateSubreddit.builder().id(7L).build();

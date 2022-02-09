@@ -33,11 +33,23 @@ import java.util.Optional;
 @Slf4j
 public class CollegiateSubredditController extends ApiController {
 
+
+    public class CollegiateSubredditOrError {
+        Long id;
+        CollegiateSubreddit collegiateSubreddit;
+        ResponseEntity<String> error;
+
+        public CollegiateSubredditOrError(Long id) {
+            this.id = id;
+        }
+    }
     @Autowired
     CollegiateSubredditRepository collegiateSubredditRepository;
 
     @Autowired
     ObjectMapper mapper;
+
+
 
     @ApiOperation(value = "List all collegiate subreddits in database")
     @PreAuthorize("hasRole('ROLE_USER')")
@@ -65,78 +77,80 @@ public class CollegiateSubredditController extends ApiController {
         return savedcollegiateSubs;
     }
 
-    //We need an inner class, helps us check whether or not the CollegiateSubreddit exists
-    public class CollegiateSubredditOrError{
-        Long id;
-        CollegiateSubreddit collegeSubreddit;
-        ResponseEntity<String> error;
-
-        public CollegiateSubredditOrError(Long id){
-            this.id = id;
-        }
-
-    }
-
-    //Checks if the collegiateSubreddit is valid.
-    //If the CollegiateSubreddit with toe.id exists, then toe.collegeSubreddit now refers to it.
-    public CollegiateSubredditOrError doesCollegiateSubredditExist(
-            CollegiateSubredditOrError toe){
-        Optional<CollegiateSubreddit> optionalCollegiateSubreddit = collegiateSubredditRepository.findById(toe.id);
-
-        if(optionalCollegiateSubreddit.isEmpty()){
-            toe.error = ResponseEntity
-                    .badRequest()
-                    .body(String.format("CollegiateSubreddit with id %d not found", toe.id));
-        } else {
-            toe.collegeSubreddit = optionalCollegiateSubreddit.get();
-        }
-        return toe;
-    }
-
-    //We ended up not needing this. Kinda doesn't make any sense. - Evan
-    /** 
-    public CollegiateSubredditOrError doesCollegiateSubredditBelongToCurrentUser(
-            CollegiateSubredditOrError toe){
-        CurrentUser currentUser = getCurrentUser();
-        log.info("currentUser={}", currentUser);
-
-        Long currentUserId = currentUser.getUser().getId();
-        
-        //collegeSubreddit doesn't necessarily have a getUser();
-        //This comparison doesn't really make any sense, but for the sake of the project
-        //We'll just go with it until further issue.
-        Long collegiateSubredditId = toe.collegeSubreddit.getId();
-        log.info("currentUserId={} CollegiateSubredditUserId={}", currentUserId, collegiateSubredditId);
-
-        if(collegiateSubredditId != currentUserId){
-            toe.error = ResponseEntity
-                    .badRequest()
-                    .body(String.format("CollegiateSubreddit with id %d not found", toe.id));
-        }
-        return toe;
-    }
-    **/
-
-    //ADD GET
-    @ApiOperation(value = "Get a single CollegiateSubreddit")
+    @ApiOperation(value = "Delete a CollegiateSubreddit")
     @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("")
-    public ResponseEntity<String> getCollegiateSubredditById(
-            @ApiParam("id") @RequestParam Long id) throws JsonProcessingException {
+    @DeleteMapping("")
+    public ResponseEntity<String> deleteCollegiateSubreddit(
+            @ApiParam("id") @RequestParam Long id) {
         loggingService.logMethod();
+
         CollegiateSubredditOrError toe = new CollegiateSubredditOrError(id);
 
         toe = doesCollegiateSubredditExist(toe);
         if (toe.error != null) {
             return toe.error;
         }
-        /** //This doesn't make sense, collegiateSubreddits don't belong to anyone.
-        toe = doesCollegiateSubredditBelongToCurrentUser(toe);
-        if (toe.error != null) {
-            return toe.error;
-        }
-        **/
-        String body = mapper.writeValueAsString(toe.collegeSubreddit);
-        return ResponseEntity.ok().body(body);
+
+   
+        collegiateSubredditRepository.deleteById(id);
+        return ResponseEntity.ok().body(String.format("record with id %d deleted", id));
+
     }
+
+    // @ApiOperation(value = "Delete another user's CollegiateSubreddit")
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // @DeleteMapping("/admin")
+    // public ResponseEntity<String> deleteCollegiateSubreddit_Admin(
+    //         @ApiParam("id") @RequestParam Long id) {
+    //     loggingService.logMethod();
+
+    //     CollegiateSubredditOrError toe = new CollegiateSubredditOrError(id);
+
+    //     toe = doesCollegiateSubredditExist(toe);
+    //     if (toe.error != null) {
+    //         return toe.error;
+    //     }
+
+    //     collegiateSubredditRepository.deleteById(id);
+
+    //     return ResponseEntity.ok().body(String.format("colegiate subreddit with id %d deleted", id));
+
+    // }
+
+     /**
+     * Pre-conditions: toe.id is value to look up, toe.todo and toe.error are null
+     * 
+     * Post-condition: if todo with id toe.id exists, toe.todo now refers to it, and
+     * error is null.
+     * Otherwise, todo with id toe.id does not exist, and error is a suitable return
+     * value to
+     * report this error condition.
+     */
+    public CollegiateSubredditOrError doesCollegiateSubredditExist(CollegiateSubredditOrError toe) {
+
+        Optional<CollegiateSubreddit> optionalCollegiateSubreddit = collegiateSubredditRepository.findById(toe.id);
+
+        if (optionalCollegiateSubreddit.isEmpty()) {
+            toe.error = ResponseEntity
+                    .badRequest()
+                    .body(String.format("record with id %d not found", toe.id));
+        } else {
+            toe.collegiateSubreddit = optionalCollegiateSubreddit.get();
+
+        }
+        return toe;
+    }
+
+
+    /**
+     * Pre-conditions: toe.todo is non-null and refers to the todo with id toe.id,
+     * and toe.error is null
+     * 
+     * Post-condition: if todo belongs to current user, then error is still null.
+     * Otherwise error is a suitable
+     * return value.
+     */
+
+
+
 }
