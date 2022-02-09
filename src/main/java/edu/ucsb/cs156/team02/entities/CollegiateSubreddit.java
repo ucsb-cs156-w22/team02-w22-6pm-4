@@ -20,6 +20,10 @@ public class CollegiateSubreddit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
+  public long getId(){
+    return id;
+  }
+
   private String name;
   private String location;
   private String subreddit;
