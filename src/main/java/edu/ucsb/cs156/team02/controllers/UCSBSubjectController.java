@@ -28,7 +28,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @Api(description = "UCSBSubject")
-@RequestMapping("api/UCSBSubjects")
+@RequestMapping("/api/UCSBSubjects")
 @RestController
 @Slf4j
 public class UCSBSubjectController extends ApiController {
@@ -164,7 +164,7 @@ public class UCSBSubjectController extends ApiController {
 
         toe = doesUCSBSubjectExist(toe);
         if (toe.error != null) {
-            return toe.error;
+            return ResponseEntity.badRequest().body(String.format("record %d not found", id));
         }
         incomingUCSBSubject.setId(id);
         repository.save(incomingUCSBSubject);

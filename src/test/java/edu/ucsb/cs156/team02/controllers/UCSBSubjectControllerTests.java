@@ -214,7 +214,7 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
         when(repository.findById(eq(7L))).thenReturn(Optional.of(ucsbSubject1));
 
         MvcResult response = mockMvc.perform(
-                put("/api/ucsbSubjects?id=7")
+                put("/api/UCSBSubjects?id=7")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(requestBody)
@@ -237,7 +237,7 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
         when(repository.findById(eq(7L))).thenReturn(Optional.empty());
 
         MvcResult response = mockMvc.perform(
-                put("/api/ucsbSubject?id=7")
+                put("/api/UCSBSubjects?id=7")
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding("utf-8")
                         .content(requestBody)
@@ -246,6 +246,6 @@ public class UCSBSubjectControllerTests extends ControllerTestCase {
 
         verify(repository, times(1)).findById(7L);
         String responseString = response.getResponse().getContentAsString();
-        assertEquals("record with id 7 not found", responseString);
+        assertEquals("record 7 not found", responseString);
     }
 }

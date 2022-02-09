@@ -202,7 +202,7 @@ public class CollegiateSubredditController extends ApiController {
         CollegiateSubredditOrError toe = new CollegiateSubredditOrError(id);
         toe = doesCollegiateSubredditExist(toe);
         if (toe.error != null) {
-            return toe.error;
+            return ResponseEntity.badRequest().body(String.format("record %d not found", id));
         }
         
         incomingCollegiateSubreddit.setId(id);
