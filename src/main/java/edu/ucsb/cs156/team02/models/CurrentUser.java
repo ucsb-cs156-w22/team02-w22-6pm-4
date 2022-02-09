@@ -19,4 +19,11 @@ import java.util.Collection;
 public class CurrentUser {
   private User user;
   private Collection<? extends GrantedAuthority> roles;
+
+  public User getUser(){
+    return user;
+  }
+  //public void setUser(User newUser) {
+    //user = newUser;
+  //}
 }

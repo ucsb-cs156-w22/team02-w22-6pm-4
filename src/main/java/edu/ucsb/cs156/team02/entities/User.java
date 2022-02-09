@@ -26,4 +26,8 @@ public class User {
   private String locale;
   private String hostedDomain;
   private boolean admin;
+
+  public long getId() {
+    return id;
+  }
 }

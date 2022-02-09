@@ -25,10 +25,30 @@ public class UCSBSubject{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    //private User user;
+
     private String subjectCode;
     private String subjectTranslation;
     private String deptCode;
     private String collegeCode;
     private String relatedDeptCode;
     private boolean inactive;
+
+    public long getId() {
+      return id;
+    }
+    //public void setUser(User user) {
+      //this.user = user;
+    //}
+    public static UCSBSubject dummySubject(long id) {
+      UCSBSubject subject = new UCSBSubject();
+      subject.id = id;
+      subject.subjectCode = "GPS";
+      subject.subjectTranslation = "Global Peace and Security";
+      subject.collegeCode = "UCSB";
+      subject.deptCode = "GPS";
+      subject.relatedDeptCode = "GPS";
+      subject.inactive = true;
+      return subject;
+    }
 }
