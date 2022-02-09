@@ -39,15 +39,15 @@ public class UCSBSubjectController extends ApiController {
      * along with the error messages pertaining to those situations. It
      * bundles together the state needed for those checks.
      */
-    // public class UCSBSubjectOrError {
-    //     Long id;
-    //     UCSBSubject UCSBSubject;
-    //     ResponseEntity<String> error;
+    public class UCSBSubjectOrError {
+         Long id;
+         UCSBSubject UCSBSubject;
+         ResponseEntity<String> error;
 
-    //     public UCSBSubjectOrError(Long id) {
-    //         this.id = id;
-    //     }
-    // }
+         public UCSBSubjectOrError(Long id) {
+             this.id = id;
+         }
+    }
 
     @Autowired
     UCSBSubjectRepository UCSBSubjectRepository;
@@ -244,19 +244,19 @@ public class UCSBSubjectController extends ApiController {
      * value to
      * report this error condition.
      */
-    // public UCSBSubjectOrError doesUCSBSubjectExist(UCSBSubjectOrError toe) {
+    public UCSBSubjectOrError doesUCSBSubjectExist(UCSBSubjectOrError toe) {
 
-    //     Optional<UCSBSubject> optionalUCSBSubject = UCSBSubjectRepository.findById(toe.id);
+         Optional<UCSBSubject> optionalUCSBSubject = UCSBSubjectRepository.findById(toe.id);
 
-    //     if (optionalUCSBSubject.isEmpty()) {
-    //         toe.error = ResponseEntity
-    //                 .badRequest()
-    //                 .body(String.format("UCSBSubject with id %d not found", toe.id));
-    //     } else {
-    //         toe.UCSBSubject = optionalUCSBSubject.get();
-    //     }
-    //     return toe;
-    // }
+         if (optionalUCSBSubject.isEmpty()) {
+             toe.error = ResponseEntity
+                     .badRequest()
+                     .body(String.format("UCSBSubject with id %d not found", toe.id));
+         } else {
+             toe.UCSBSubject = optionalUCSBSubject.get();
+         }
+         return toe;
+    }
 
     /**
      * Pre-conditions: toe.todo is non-null and refers to the todo with id toe.id,
@@ -281,5 +281,29 @@ public class UCSBSubjectController extends ApiController {
     //     }
     //     return toe;
     // }
+
+    @ApiOperation(value = "Update a single UCSBSubject")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PutMapping("")
+    public ResponseEntity<String> putUCSBSubjectById(
+            @ApiParam("id") @RequestParam Long id,
+            @RequestBody @Valid UCSBSubject incomingUCSBSubject) throws JsonProcessingException {
+        loggingService.logMethod();
+
+        //CurrentUser currentUser = getCurrentUser();
+        //User user = currentUser.getUser();
+
+        UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
+
+        toe = doesUCSBSubjectExist(toe);
+        if (toe.error != null) {
+            return toe.error;
+        }
+        incomingUCSBSubject.setId(id);
+        UCSBSubjectRepository.save(incomingUCSBSubject);
+
+        String body = mapper.writeValueAsString(incomingUCSBSubject);
+        return ResponseEntity.ok().body(body);
+    }
 
 }

@@ -153,4 +153,50 @@ public class CollegiateSubredditControllerTests extends ControllerTestCase {
         String responseString = response.getResponse().getContentAsString();
         assertEquals("CollegiateSubreddit with id 7 not found", responseString);
     }
+    /*
+    // TEST PUT
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_collegiateSubreddit__user_logged_in__put_collegiateSubreddit() throws Exception {
+        CollegiateSubreddit collegiateSubreddit1 = CollegiateSubreddit.builder()
+                .name("CollegiateSubreddit Name 7")
+                .location("CollegiateSubreddit Location 7")
+                .subreddit("CollegiateSubreddit Subreddit 7")
+                .id(7L)
+                .build();
+
+                CollegiateSubreddit updatedCollegiateSubreddit = CollegiateSubreddit.builder()
+                        .name("Test Name")
+                        .location("Test Location")
+                        .subreddit("Test Subreddit")
+                        .id(5L)
+                        .build();
+                CollegiateSubreddit correctCollegiateSubreddit = CollegiateSubreddit.builder()
+                        .name("Test Name")
+                        .location("Test Location")
+                        .subreddit("Test Subreddit")
+                        .id(7L)
+                        .build();
+
+                String requestBody = mapper.writeValueAsString(updatedCollegiateSubreddit);
+                String expectedReturn = mapper.writeValueAsString(correctCollegiateSubreddit);
+
+                when(collegiateSubredditRepository.findById(eq(7L))).thenReturn(Optional.of(collegiateSubreddit
+                // act
+                MvcResult response = mockMvc.perform(
+                        put("/api/collegiateSubreddits?id=7")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .content(requestBody)
+                                .with(csrf()))
+                        .andExpect(status().isOk()).andReturn();
+
+                // assert
+                verify(collegiateSubredditRepository, times(1)).findById(1L);
+                verify(collegiateSubredditRepository, times(1)).save(correctCollegiateSubreddit); // shoul
+                String responseString = response.getResponse().getContentAsString();
+                assertEquals(expectedReturn, responseString);
+        
+    }  
+    */
 }

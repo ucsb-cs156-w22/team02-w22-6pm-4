@@ -139,4 +139,29 @@ public class CollegiateSubredditController extends ApiController {
         String body = mapper.writeValueAsString(toe.collegeSubreddit);
         return ResponseEntity.ok().body(body);
     }
+
+    // ADD PUT
+    @ApiOperation(value = "Update a single CollegiateSubreddit")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PutMapping("")
+    public ResponseEntity<String> putCollegiateSubredditById(
+            @ApiParam("id") @RequestParam Long id,
+            @RequestBody @Valid CollegiateSubreddit incomingCollegiateSubreddit) throws JsonProcessingException {
+        loggingService.logMethod();
+
+        //CurrentUser currentUser = getCurrentUser();
+        //User user = currentUser.getUser();
+
+        CollegiateSubredditOrError toe = new CollegiateSubredditOrError(id);
+        toe = doesCollegiateSubredditExist(toe);
+        if (toe.error != null) {
+            return toe.error;
+        }
+        
+        incomingCollegiateSubreddit.setId(id);
+        collegiateSubredditRepository.save(incomingCollegiateSubreddit);
+
+        String body = mapper.writeValueAsString(incomingCollegiateSubreddit);
+        return ResponseEntity.ok().body(body);
+    }
 }
