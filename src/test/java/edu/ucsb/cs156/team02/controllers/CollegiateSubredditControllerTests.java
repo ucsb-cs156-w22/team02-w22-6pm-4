@@ -295,7 +295,7 @@ public class CollegiateSubredditControllerTests extends ControllerTestCase {
         // assert
         verify(collegiateSubredditRepository, times(1)).findById(7L);
         String responseString = response.getResponse().getContentAsString();
-        assertEquals("collegiateSubreddit with id 7 not found", responseString);
+        assertEquals("record with id 7 not found", responseString);
     }
 
 
