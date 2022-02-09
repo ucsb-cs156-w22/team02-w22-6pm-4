@@ -175,9 +175,13 @@ public class CollegiateSubredditControllerTests extends ControllerTestCase {
         assertEquals("record with id 123 not found", responseString);
     }
 
-    
 
+    //Test for the getID() method
+    @WithMockUser(roles = { "USER" })
+    @Test
+    public void api_collegiateSubreddits_return_own_id() throws Exception {
+        CollegiateSubreddit collegiateSubreddit1 = CollegiateSubreddit.builder().id(7L).build();
 
-    
-
+        assertEquals(7L, collegiateSubreddit1.getId());
+    }
 }
