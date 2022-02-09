@@ -28,7 +28,7 @@ import javax.validation.Valid;
 import java.util.Optional;
 
 @Api(description = "UCSBSubject")
-@RequestMapping("api/UCSBSubjects")
+@RequestMapping("/api/UCSBSubjects")
 @RestController
 @Slf4j
 public class UCSBSubjectController extends ApiController {
@@ -148,5 +148,29 @@ public class UCSBSubjectController extends ApiController {
          }
          return toe;
      }
+
+    @ApiOperation(value = "Update a single UCSBSubject")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PutMapping("")
+    public ResponseEntity<String> putUCSBSubjectById(
+            @ApiParam("id") @RequestParam Long id,
+            @RequestBody @Valid UCSBSubject incomingUCSBSubject) throws JsonProcessingException {
+        loggingService.logMethod();
+
+        //CurrentUser currentUser = getCurrentUser();
+        //User user = currentUser.getUser();
+
+        UCSBSubjectOrError toe = new UCSBSubjectOrError(id);
+
+        toe = doesUCSBSubjectExist(toe);
+        if (toe.error != null) {
+            return ResponseEntity.badRequest().body(String.format("record %d not found", id));
+        }
+        incomingUCSBSubject.setId(id);
+        repository.save(incomingUCSBSubject);
+
+        String body = mapper.writeValueAsString(incomingUCSBSubject);
+        return ResponseEntity.ok().body(body);
+    }
 
 }
