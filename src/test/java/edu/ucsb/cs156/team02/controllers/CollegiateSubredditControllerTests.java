@@ -117,6 +117,7 @@ public class CollegiateSubredditControllerTests extends ControllerTestCase {
         assertEquals(expectedJson, responseString);
     }
 
+
 //     @Test
 //     public void api_requirements_stranger_does_delete() throws Exception
 //     {
@@ -149,10 +150,12 @@ public class CollegiateSubredditControllerTests extends ControllerTestCase {
         assertEquals("record with id 123 deleted", responseString);
 
         
+
     }
 
     @WithMockUser(roles = { "USER" })
     @Test
+
     public void api_collegiateSubreddit__user_logged_in__delete_collegiateSubreddit_that_does_not_exist() throws Exception {
         // arrange
 
@@ -176,4 +179,5 @@ public class CollegiateSubredditControllerTests extends ControllerTestCase {
 
 
     
+
 }

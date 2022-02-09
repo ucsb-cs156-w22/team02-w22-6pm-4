@@ -136,9 +136,11 @@ public class CollegiateSubredditController extends ApiController {
                     .body(String.format("record with id %d not found", toe.id));
         } else {
             toe.collegiateSubreddit = optionalCollegiateSubreddit.get();
+
         }
         return toe;
     }
+
 
     /**
      * Pre-conditions: toe.todo is non-null and refers to the todo with id toe.id,
@@ -148,6 +150,7 @@ public class CollegiateSubredditController extends ApiController {
      * Otherwise error is a suitable
      * return value.
      */
+
 
 
 }
