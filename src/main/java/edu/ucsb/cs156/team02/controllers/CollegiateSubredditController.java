@@ -43,6 +43,7 @@ public class CollegiateSubredditController extends ApiController {
             this.id = id;
         }
     }
+
     @Autowired
     CollegiateSubredditRepository collegiateSubredditRepository;
 
@@ -141,16 +142,48 @@ public class CollegiateSubredditController extends ApiController {
         return toe;
     }
 
+    //We ended up not needing this. Kinda doesn't make any sense. - Evan
+    /** 
+    public CollegiateSubredditOrError doesCollegiateSubredditBelongToCurrentUser(
+            CollegiateSubredditOrError toe){
+        CurrentUser currentUser = getCurrentUser();
+        log.info("currentUser={}", currentUser);
+        Long currentUserId = currentUser.getUser().getId();
+        
+        //collegeSubreddit doesn't necessarily have a getUser();
+        //This comparison doesn't really make any sense, but for the sake of the project
+        //We'll just go with it until further issue.
+        Long collegiateSubredditId = toe.collegeSubreddit.getId();
+        log.info("currentUserId={} CollegiateSubredditUserId={}", currentUserId, collegiateSubredditId);
+        if(collegiateSubredditId != currentUserId){
+            toe.error = ResponseEntity
+                    .badRequest()
+                    .body(String.format("CollegiateSubreddit with id %d not found", toe.id));
+        }
+        return toe;
+    }
+    **/
 
-    /**
-     * Pre-conditions: toe.todo is non-null and refers to the todo with id toe.id,
-     * and toe.error is null
-     * 
-     * Post-condition: if todo belongs to current user, then error is still null.
-     * Otherwise error is a suitable
-     * return value.
-     */
+    //ADD GET
+    @ApiOperation(value = "Get a single CollegiateSubreddit")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public ResponseEntity<String> getCollegiateSubredditById(
+            @ApiParam("id") @RequestParam Long id) throws JsonProcessingException {
+        loggingService.logMethod();
+        CollegiateSubredditOrError toe = new CollegiateSubredditOrError(id);
 
-
-
+        toe = doesCollegiateSubredditExist(toe);
+        if (toe.error != null) {
+            return toe.error;
+        }
+        /** //This doesn't make sense, collegiateSubreddits don't belong to anyone.
+        toe = doesCollegiateSubredditBelongToCurrentUser(toe);
+        if (toe.error != null) {
+            return toe.error;
+        }
+        **/
+        String body = mapper.writeValueAsString(toe.collegiateSubreddit);
+        return ResponseEntity.ok().body(body);
+    }
 }
