@@ -142,36 +142,6 @@ public class CollegiateSubredditController extends ApiController {
         return toe;
     }
 
-
-    /**
-     * Pre-conditions: toe.todo is non-null and refers to the todo with id toe.id,
-     * and toe.error is null
-     * 
-     * Post-condition: if todo belongs to current user, then error is still null.
-     * Otherwise error is a suitable
-     * return value.
-     */
-
-
-    
-
-
-    //Checks if the collegiateSubreddit is valid.
-    //If the CollegiateSubreddit with toe.id exists, then toe.collegeSubreddit now refers to it.
-    public CollegiateSubredditOrError doesCollegiateSubredditExist(
-            CollegiateSubredditOrError toe){
-        Optional<CollegiateSubreddit> optionalCollegiateSubreddit = collegiateSubredditRepository.findById(toe.id);
-
-        if(optionalCollegiateSubreddit.isEmpty()){
-            toe.error = ResponseEntity
-                    .badRequest()
-                    .body(String.format("CollegiateSubreddit with id %d not found", toe.id));
-        } else {
-            toe.collegeSubreddit = optionalCollegiateSubreddit.get();
-        }
-        return toe;
-    }
-
     //We ended up not needing this. Kinda doesn't make any sense. - Evan
     /** 
     public CollegiateSubredditOrError doesCollegiateSubredditBelongToCurrentUser(
@@ -213,7 +183,7 @@ public class CollegiateSubredditController extends ApiController {
             return toe.error;
         }
         **/
-        String body = mapper.writeValueAsString(toe.collegeSubreddit);
+        String body = mapper.writeValueAsString(toe.collegiateSubreddit);
         return ResponseEntity.ok().body(body);
     }
 }
